@@ -1,0 +1,24 @@
+<div class="left-menu">
+
+  <h2 center>Активные компании</h2>
+
+  <mat-list>
+    <a class="item-box" mat-list-item *ngFor="let employer of employers$" routerLink="/employer/{{employer.id}}">
+
+      <span>{{employer.name}}</span>
+      <span class="spacer"> </span>
+      <span>{{employer.count}}</span>
+
+      <mat-divider></mat-divider>
+
+    </a>
+
+  </mat-list>
+
+</div>
+
+<div class="right-content">
+
+
+</div>
+

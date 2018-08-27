@@ -1,0 +1,20 @@
+.left-menu {
+  width: 30%;
+  padding: 10px;
+}
+
+.right-content {
+  width: 70%;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.item-box {
+  text-decoration: none;
+}
+
+.item-box:hover {
+  background: #f5f5f5;
+}

@@ -1,0 +1,96 @@
+.profile-page {
+  width: 100%;
+  margin: 0;
+  display: table;
+}
+
+.left-profile-menu {
+  display: table-cell;
+  width: 30%;
+}
+
+.right-profile-content {
+  display: table-cell;
+  width: 70%;
+}
+
+.space {
+  flex: 1 1 auto;
+}
+
+.item-box:hover{
+  background: #c1c1c1;
+}
+
+.info_page {
+
+}
+
+.icon-prefix {
+  margin-right: 10px;
+}
+
+.profile-content {
+  display: table;
+  width: 100%;
+}
+
+.profile-content-header {
+  display: flex;
+  width: 100%;
+}
+
+.profile-content-title {
+  margin: auto;
+}
+
+.profile-content-body {
+
+}
+
+mat-form-field {
+  width: 60%;
+  margin-left: 20%;
+}
+
+.hr-90 {
+  width: 90%;
+  margin-left: 5%;
+}
+
+.button-editor {
+  margin: auto;
+}
+
+.button-cancel {
+  margin-left: 10px;
+}
+
+.test1 {
+  width: 100%;
+  display: flex;
+}
+
+.table-offices {
+  width: 90%;
+  margin-left: 5%;
+  margin-bottom: 20px;
+}
+
+a {color: rgba(0,0,0,.87);}      /* unvisited link */
+a:visited {color: rgba(0,0,0,.87);}  /* visited link */
+a:hover {color: rgba(0,0,0,.87);}  /* mouse over link */
+a:active {color: rgba(0,0,0,.87);}  /* selected link */
+
+.delete-dialog {
+  display: flex;
+  width: 100%;
+}
+
+.delete-dialog-content {
+  text-align: center;
+}
+
+.reg-office-form {
+  width: 100%;
+}

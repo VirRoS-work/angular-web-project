@@ -1,0 +1,240 @@
+<div class="profile-page">
+  <div class="left-profile-menu s4">
+
+    <mat-toolbar>
+      <mat-toolbar-row class="item-box" (click)=click_menu(1)>
+        <mat-icon class="icon-prefix">event_note</mat-icon>
+        <span>Информация</span>
+        <span class="space"></span>
+        <mat-icon>arrow_forward_ios</mat-icon>
+      </mat-toolbar-row>
+      <mat-toolbar-row class="item-box" (click)=click_menu(2)>
+        <mat-icon class="icon-prefix">domain</mat-icon>
+        <span>Офисы</span>
+        <span class="space"></span>
+        <mat-icon>arrow_forward_ios</mat-icon>
+      </mat-toolbar-row>
+      <mat-toolbar-row class="item-box" (click)=click_menu(3)>
+        <mat-icon class="icon-prefix">business_center</mat-icon>
+        <span>Вакансии</span>
+        <span class="space"></span>
+        <mat-icon>arrow_forward_ios</mat-icon>
+      </mat-toolbar-row>
+      <mat-toolbar-row class="item-box" (click)=click_menu(4)>
+        <mat-icon class="icon-prefix">settings</mat-icon>
+        <span>Настройки</span>
+        <span class="space"></span>
+        <mat-icon>arrow_forward_ios</mat-icon>
+      </mat-toolbar-row>
+    </mat-toolbar>
+
+  </div>
+
+  <div class="right-profile-content">
+
+    <div class="info_page" *ngIf="page_info">
+
+      <div class="profile-content">
+
+        <div class="profile-content-header">
+          <h2 class="profile-content-title">Информация</h2>
+        </div>
+
+        <div class="profile-content-body">
+
+          <form class="profile-information-form">
+            <hr class="hr-90">
+
+            <p>
+              <mat-form-field>
+                <mat-label>Название</mat-label>
+                <input matInput #name_emp placeholder="Введите название компании" value="{{employer$.name}}"
+                       [disabled]="disableSelect.value" required>
+              </mat-form-field>
+            </p>
+
+            <p>
+              <mat-form-field>
+                <mat-select #type_emp placeholder="Тип компании" value="disableSelect.value" value="{{employer$.type}}"
+                            [disabled]="disableSelect.value" required>
+                  <mat-option *ngFor="let type of types$" [value]=type>
+                    {{type}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </p>
+
+            <p>
+              <mat-form-field>
+                <mat-select #count_emp placeholder="Количество человек" value="{{employer$.number_of_person}}"
+                            [disabled]="disableSelect.value" required>
+                  <mat-option *ngFor="let count of count$" [value]=count>
+                    {{count}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </p>
+
+            <p>
+              <mat-form-field>
+                <mat-label>Адрес</mat-label>
+                <input matInput #address_emp placeholder="Введите адрес компании" value="{{employer$.address}}"
+                       [disabled]="disableSelect.value">
+              </mat-form-field>
+            </p>
+
+            <p>
+              <mat-form-field>
+                <mat-label>Сайт</mat-label>
+                <input matInput #site_emp placeholder="Введите адрес сайта" value="{{employer$.site}}"
+                       [disabled]="disableSelect.value">
+              </mat-form-field>
+            </p>
+
+            <p>
+              <mat-form-field>
+                <mat-label>Описание</mat-label>
+                <textarea matInput #description_emp placeholder="Введите описание компании"
+                          value="{{employer$.description}}" [disabled]="disableSelect.value"
+                          maxlength="1000"></textarea>
+              </mat-form-field>
+            </p>
+
+
+            <div class="test1">
+              <div class="button-editor" *ngIf="!disableSelect.value">
+                <button mat-flat-button color="primary" (click)="disableSelect.setValue(true)">Сохранить</button>
+                <button mat-stroked-button class="button-cancel" (click)="disableSelect.setValue(true)">Отмена</button>
+              </div>
+              <button mat-flat-button class="button-editor" color="primary" *ngIf="disableSelect.value"
+                      (click)="disableSelect.setValue(false)">Редактировать
+              </button>
+            </div>
+          </form>
+
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class="offices_page" *ngIf="page_offices">
+
+      <div class="profile-content">
+
+        <div class="profile-content-header">
+          <h2 class="profile-content-title">Офисы</h2>
+        </div>
+
+        <div class="profile-content-body">
+
+          <hr class="hr-90">
+
+          <table mat-table class="table-offices" [dataSource]="offices$">
+
+            <ng-container matColumnDef="city">
+              <mat-header-cell *matHeaderCellDef><h3>Город</h3></mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.city}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="address">
+              <mat-header-cell *matHeaderCellDef><h3>Адрес</h3></mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.address}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="description">
+              <mat-header-cell *matHeaderCellDef><h3>Описание</h3></mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.description}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="icon">
+              <mat-header-cell *matHeaderCellDef><h3>Опции</h3></mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <mat-icon>create</mat-icon>
+                <a>
+                  <mat-icon (click)=openDeleteOfficeDialog(element.id)>clear</mat-icon>
+                </a></mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+          </table>
+
+          <div class="test1">
+            <button mat-flat-button class="button-editor" color="primary" *ngIf="disableOfficeSelect.value"
+                    (click)="disableOfficeSelect.setValue(false)">
+              Добавить офис
+            </button>
+
+          </div>
+
+
+          <div class="test1">
+
+            <form class="reg-office-form" *ngIf="!disableOfficeSelect.value">
+
+              <p>
+                <mat-form-field appearance="outline">
+                  <mat-label>Город</mat-label>
+                  <input matInput #city_office placeholder="Введите название города" [formControl]="cityControl"
+                         required>
+                  <mat-icon matSuffix>event_note</mat-icon>
+                  <mat-error *ngIf="cityControl.hasError('required')">Название города должно быть обязательно
+                    заполнено
+                  </mat-error>
+                </mat-form-field>
+              </p>
+
+              <p>
+                <mat-form-field appearance="outline">
+                  <mat-label>Адрес</mat-label>
+                  <input matInput #address_office placeholder="Введите адрес офиса" [formControl]="addressControl"
+                         required>
+                  <mat-icon matSuffix>map</mat-icon>
+                  <mat-error *ngIf="addressControl.hasError('required')">Адрес офиса должен быть обязательно заполнено
+                  </mat-error>
+                </mat-form-field>
+              </p>
+
+              <p>
+                <mat-form-field appearance="outline">
+                  <mat-label>Описание</mat-label>
+                  <textarea matInput #description_office placeholder="Введите описание офиса"
+                            maxlength="1000"></textarea>
+                  <mat-hint align="end">{{description_office.value.length}} / 1000</mat-hint>
+                </mat-form-field>
+              </p>
+
+              <div class="test1">
+                <div class="button-editor">
+                  <button mat-flat-button color="primary"
+                          (click)="addOffice(city_office.value, address_office.value, description_office)">
+                    Сохранить
+                  </button>
+                  <button mat-stroked-button class="button-cancel" (click)="clearOffice()">Отмена
+                  </button>
+                </div>
+              </div>
+
+            </form>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="vacancies_page" *ngIf="page_vacancies">
+      Вакансии
+    </div>
+
+    <div class="settings_page" *ngIf="page_settings">
+      Настройки
+    </div>
+
+
+  </div>
+</div>
+
+

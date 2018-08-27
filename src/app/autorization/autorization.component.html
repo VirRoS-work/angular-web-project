@@ -1,0 +1,141 @@
+<mat-card class="panel-autorization">
+  <mat-tab-group mat-stretch-tabs>
+
+    <mat-tab label="Вход">
+
+      <form class="registration-form">
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Логин</mat-label>
+            <input matInput #login_auto placeholder="Введите логин" [formControl]="loginAutoControl" required>
+            <mat-icon matSuffix>event_note</mat-icon>
+            <mat-error *ngIf="loginAutoControl.hasError('required')">Пожалуйста, введите логин!</mat-error>
+          </mat-form-field>
+        </p>
+
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Пароль</mat-label>
+            <input matInput #password_auto placeholder="Придумайте пароль" [type]="'password'"
+                   [formControl]="passwordAutoControl" required>
+            <mat-icon matSuffix>vpn_key</mat-icon>
+            <mat-error *ngIf="passwordAutoControl.hasError('required')">Пожалуйста, введите пароль!</mat-error>
+          </mat-form-field>
+        </p>
+
+        <p *ngIf="result_login != true && count_login > 0">
+          <span>Неверный логин или пароль!</span>
+        </p>
+
+        <button class="test" mat-raised-button color="primary" (click)="loginEmployer(login_auto.value, password_auto.value)">Вход</button>
+      </form>
+
+    </mat-tab>
+
+    <mat-tab label="Регистрация">
+
+      <form class="registration-form">
+
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Логин</mat-label>
+            <input matInput #login placeholder="Придумайте логин" [formControl]="loginControl" required minlength="6">
+            <mat-icon matSuffix>event_note</mat-icon>
+            <mat-error *ngIf="loginControl.hasError('required')">Логин обязателен для заполнения</mat-error>
+            <mat-error *ngIf="loginControl.hasError('minlength')">Количество символов должно быть не менее 6</mat-error>
+          </mat-form-field>
+        </p>
+
+
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Пароль</mat-label>
+            <input matInput #password placeholder="Придумайте пароль" [type]="hide ? 'password' : 'text'"
+                   [formControl]="passwordControl" required minlength="6">
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+            <mat-error *ngIf="passwordControl.hasError('required')">Пароль обязателен для заполнения</mat-error>
+            <mat-error *ngIf="passwordControl.hasError('minlength')">Количество символов должно быть не менее 6
+            </mat-error>
+          </mat-form-field>
+        </p>
+
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Повторите пароль</mat-label>
+            <input matInput #password2 placeholder="Повторите пароль" [type]="hide2 ? 'password' : 'text'"
+                   [formControl]="password2Control" required>
+            <mat-icon matSuffix (click)="hide2 = !hide2">{{hide2 ? 'visibility' : 'visibility_off'}}</mat-icon>
+            <mat-error *ngIf="password2Control.hasError('required')">Пароль обязателен для заполнения</mat-error>
+            <mat-error *ngIf="password2.value.toString() != password2.value.toString()">Пароли не совпадают</mat-error>
+          </mat-form-field>
+        </p>
+
+        <hr>
+
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Название</mat-label>
+            <input matInput #name_emp placeholder="Введите название компании" [formControl]="nameControl" required>
+            <mat-icon matSuffix>event_note</mat-icon>
+            <mat-error *ngIf="nameControl.hasError('required')">Название компании должно быть обязательно заполнено
+            </mat-error>
+          </mat-form-field>
+        </p>
+
+        <p>
+          <mat-form-field>
+            <mat-select #type_emp placeholder="Тип компании" [formControl]="typeControl" required>
+              <mat-option *ngFor="let type of types$" [value]=type>
+                {{type}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="typeControl.hasError('required')">Тип должен быть обязательно выбран</mat-error>
+          </mat-form-field>
+        </p>
+
+        <p>
+          <mat-form-field>
+            <mat-select #count_emp placeholder="Количество человек" [formControl]="countControl" required>
+              <mat-option *ngFor="let count of count$" [value]=count>
+                {{count}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="countControl.hasError('required')">Размер компании должен быть обязательно выбран
+            </mat-error>
+          </mat-form-field>
+        </p>
+
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Адрес</mat-label>
+            <input matInput #address_emp placeholder="Введите адрес компании">
+            <mat-icon matSuffix>map</mat-icon>
+          </mat-form-field>
+        </p>
+
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Сайт</mat-label>
+            <input matInput #site_emp placeholder="Введите адрес сайта">
+            <mat-icon matSuffix>language</mat-icon>
+          </mat-form-field>
+        </p>
+
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Описание</mat-label>
+            <textarea matInput #description_emp placeholder="Введите описание компании" maxlength="1000"></textarea>
+            <mat-hint align="end">{{description_emp.value.length}} / 1000</mat-hint>
+          </mat-form-field>
+        </p>
+
+        <button class="test" mat-raised-button color="primary"
+                (click)="regCompany(login.value, password.value, name_emp.value, type_emp.value, count_emp.value,
+                address_emp.value, site_emp.value, description_emp.value)">Регистрация</button>
+      </form>
+
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>
+
+
