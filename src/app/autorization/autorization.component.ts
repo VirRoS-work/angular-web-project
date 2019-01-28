@@ -50,7 +50,7 @@ export class AutorizationComponent implements OnInit {
 
       if (site == "") site = null;
       if (address == "") address = null;
-      if (description = "") description = null;
+      if (description == "") description = null;
 
       const body = {
         "login": login,

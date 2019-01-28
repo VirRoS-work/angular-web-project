@@ -67,6 +67,8 @@ mat-form-field {
 }
 
 .test1 {
+  margin-top: 5px;
+  margin-bottom: 5px;
   width: 100%;
   display: flex;
 }
@@ -75,6 +77,23 @@ mat-form-field {
   width: 90%;
   margin-left: 5%;
   margin-bottom: 20px;
+}
+
+.table-vacancies {
+  width: 90%;
+  margin-left: 5%;
+  margin-bottom: 20px;
+}
+
+.table-contacts {
+  width: 90%;
+  margin-left: 5%;
+  margin-bottom: 20px;
+}
+
+.createContact{
+  width: 100%;
+  border: black 1px;
 }
 
 a {color: rgba(0,0,0,.87);}      /* unvisited link */
@@ -93,4 +112,60 @@ a:active {color: rgba(0,0,0,.87);}  /* selected link */
 
 .reg-office-form {
   width: 100%;
+}
+
+
+
+
+mat-row.example-detail-row {
+  height: 0;
+}
+
+mat-row.example-element-row:not(.example-expanded-row):hover {
+  background: #f5f5f5;
+}
+
+mat-row.example-element-row:not(.example-expanded-row):active {
+  background: #efefef;
+}
+
+.example-element-row td {
+  border-bottom-width: 0;
+}
+
+.example-element-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+.example-element-diagram {
+  min-width: 80px;
+  border: 2px solid black;
+  padding: 8px;
+  font-weight: lighter;
+  margin: 8px 0;
+  height: 104px;
+}
+
+.example-element-symbol {
+  font-weight: bold;
+  font-size: 40px;
+  line-height: normal;
+}
+
+.example-element-description {
+  padding: 16px;
+}
+
+.example-element-description-attribution {
+  opacity: 0.5;
+}
+
+
+.button-editors-item {
+  margin-left: 10px;
+}
+
+mat-panel-title {
+  width: 35%;
 }

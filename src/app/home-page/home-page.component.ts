@@ -15,13 +15,20 @@ export interface InfoCompany {
 export class HomePageComponent implements OnInit {
 
   employers$: Object;
+  vacancies$: Object;
 
   constructor(private data: DataService) { }
 
   ngOnInit() {
+
     this.data.getEmployers().subscribe(
       data => this.employers$ = data
     );
+
+    this.data.getVacancies().subscribe(
+      data => this.vacancies$ = data
+    );
+
   }
 
 

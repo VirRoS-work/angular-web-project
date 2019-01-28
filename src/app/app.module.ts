@@ -47,12 +47,28 @@ import {
 import { BarMenuComponent } from './bar-menu/bar-menu.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { AutorizationComponent } from './autorization/autorization.component';
-import {DeleteOfficeDialog, ProfileComponent} from './profile/profile.component';
+import {
+  DeleteOfficeDialog,
+  DeleteVacancyDialog,
+  ProfileComponent,
+  DeleteContactPersonDialog,
+  DeleteContactDialog,
+  DeleteSpecificationDialog
+} from './profile/profile.component';
+import { VacancyCardComponent } from './vacancy-card/vacancy-card.component';
+import { VacancyComponent } from './vacancy/vacancy.component';
+import { VacanciesComponent } from './vacancies/vacancies.component';
+import { EmployerComponent } from './employer/employer.component';
+import { OfficeCardComponent } from './office-card/office-card.component';
 
 const routs = [
   {path: '', component: HomePageComponent},
   {path: 'autorization', component: AutorizationComponent},
-  {path: 'my_profile', component: ProfileComponent}
+  {path: 'my_profile', component: ProfileComponent},
+  {path: 'vacancy/:id', component: VacancyComponent},
+  {path: 'vacancies', component: VacanciesComponent},
+  {path: 'employer/:id', component: EmployerComponent},
+  {path: 'employer/:id/vacancy/:id', redirectTo: 'vacancy/:id', pathMatch: 'full' }
 ];
 
 @NgModule({
@@ -62,7 +78,16 @@ const routs = [
     HomePageComponent,
     AutorizationComponent,
     ProfileComponent,
-    DeleteOfficeDialog
+    DeleteOfficeDialog,
+    DeleteVacancyDialog,
+    DeleteContactPersonDialog,
+    DeleteContactDialog,
+    DeleteSpecificationDialog,
+    VacancyCardComponent,
+    VacancyComponent,
+    VacanciesComponent,
+    EmployerComponent,
+    OfficeCardComponent
   ],
   imports: [
     BrowserModule,
@@ -108,7 +133,14 @@ const routs = [
     MatTreeModule
   ],
   providers: [],
-  entryComponents: [ProfileComponent, DeleteOfficeDialog],
+  entryComponents: [
+    ProfileComponent,
+    DeleteOfficeDialog,
+    DeleteVacancyDialog,
+    DeleteContactPersonDialog,
+    DeleteContactDialog,
+    DeleteSpecificationDialog
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

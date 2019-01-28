@@ -1,24 +1,41 @@
-<div class="left-menu">
+<div class="page">
 
-  <h2 center>Активные компании</h2>
+  <div class="left-menu">
 
-  <mat-list>
-    <a class="item-box" mat-list-item *ngFor="let employer of employers$" routerLink="/employer/{{employer.id}}">
+    <div class="vacancies-header">
+      <h2 class="vacancies-title">Активные компании</h2>
+    </div>
+    <hr class="hr-90">
 
-      <span>{{employer.name}}</span>
-      <span class="spacer"> </span>
-      <span>{{employer.count}}</span>
+    <mat-list>
+      <a class="item-box" mat-list-item *ngFor="let employer of employers$" routerLink="/employer/{{employer.id}}">
 
-      <mat-divider></mat-divider>
+        <span>{{employer.name}}</span>
+        <span class="spacer"> </span>
+        <span>{{employer.count}}</span>
 
-    </a>
+        <mat-divider></mat-divider>
 
-  </mat-list>
+      </a>
+
+    </mat-list>
+
+  </div>
+
+  <div class="right-content">
+
+    <div class="vacancies-header">
+      <h2 class="vacancies-title">Вакансии</h2>
+    </div>
+    <hr class="hr-90">
+
+    <app-vacancy-card *ngFor="let vacancy of vacancies$" title="{{vacancy.title}}" description="{{vacancy.description}}"
+                      salary_max="{{vacancy.salary_max}}" salary_min="{{vacancy.salary_min}}" id="{{vacancy.id}}"></app-vacancy-card>
+
+    <div class="test1">
+      <button mat-flat-button class="button-editor" color="primary" routerLink="/vacancies">Показать больше вакансий</button>
+    </div>
+
+  </div>
 
 </div>
-
-<div class="right-content">
-
-
-</div>
-
