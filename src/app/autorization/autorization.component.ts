@@ -1,7 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
-import {DataService} from '../data.service';
 import {Router} from "@angular/router";
+import {AuthService} from "../sevices/auth.service";
+import {TokenStorageService} from "../auth/token-storage.service";
+import {AuthLoginInfo} from "../auth/login-info";
+import {MatRadioChange} from "@angular/material";
+import {SignUpCompanyInfo} from "../auth/signupcompany-info";
+import {InfoService} from "../sevices/info.service";
 
 @Component({
   selector: 'app-autorization',
@@ -10,77 +15,128 @@ import {Router} from "@angular/router";
 })
 export class AutorizationComponent implements OnInit {
 
-  nameControl = new FormControl('', [Validators.required]);
-  countControl = new FormControl('', [Validators.required]);
-  typeControl = new FormControl('', [Validators.required]);
-  passwordControl = new FormControl('', [Validators.required, Validators.minLength(6)]);
-  loginControl = new FormControl('', [Validators.required, Validators.minLength(6)]);
-  password2Control = new FormControl('', [Validators.required]);
+  isLoggedIn = false;
+  isLoginFailed = false;
+  isRegistrationFailed = false;
+  isRegistrationSuccess = false;
+  errorMessage = '';
 
+  roles: string[] = [];
+  private loginInfo: AuthLoginInfo;
+  private signUpCompanyInfo: SignUpCompanyInfo;
+
+  userType: string = "user";
+
+  //login control
   loginAutoControl = new FormControl('', [Validators.required]);
   passwordAutoControl = new FormControl('', [Validators.required]);
 
+  //signUp control
+  loginControl = new FormControl('', [Validators.required, Validators.minLength(6)]);
+  mailControl = new FormControl('', [Validators.required]);
+  passwordControl = new FormControl('', [Validators.required, Validators.minLength(6)]);
+  password2Control = new FormControl('', [Validators.required]);
+
+  //user control
+
+  //company control
+  companyNameControl = new FormControl('',
+    [Validators.required, Validators.minLength(3), Validators.maxLength(50)]);
+  companyTypeControl = new FormControl('', Validators.required);
+  companyCountControl = new FormControl('', Validators.required);
+  companyAddressControl = new FormControl('', Validators.maxLength(250));
+  companySiteControl = new FormControl('', Validators.maxLength(250));
+
   hide = true;
   hide2 = true;
+  $companyTypes: string[];
+  $companyCounts: string[];
 
-  types$: Object;
-  count$: Object;
-
-  error_login = true;
-  count_login = 0;
-
-  constructor(private data: DataService, private router: Router) {
+  constructor(private router: Router, private info: InfoService,
+              private authService: AuthService, private tokenStorage: TokenStorageService) {
   }
 
   ngOnInit() {
-    this.data.getTypesEmployer().subscribe(
-      data => this.types$ = data
+    if (this.tokenStorage.getToken()) {
+      window.location.replace("");
+    }
+
+    this.info.getTypesEmployer().subscribe(
+      data => this.$companyTypes = data
     );
 
-    this.data.getCountEmployees().subscribe(
-      data => this.count$ = data
+    this.info.getCountsEmployer().subscribe(
+      data => this.$companyCounts = data
     );
   }
 
-  regCompany(login: String, password: String, name: String, type: String,
-             count: String, address: String, site: String, description: String) {
+  loginEmployer(login: string, password: string) {
 
-    if (this.loginControl.valid && this.passwordControl.valid && this.nameControl.valid
-      && this.typeControl.valid && this.countControl.valid) {
+    if (this.loginAutoControl.valid && this.passwordAutoControl.valid) {
 
-      if (site == "") site = null;
-      if (address == "") address = null;
-      if (description == "") description = null;
+      this.loginInfo = new AuthLoginInfo(login, password);
 
-      const body = {
-        "login": login,
-        "password": password,
-        "name": name,
-        "type": type,
-        "number_of_person": count,
-        "address": address,
-        "site": site,
-        "description": description
-      }
+      this.authService.attemptAuth(this.loginInfo).subscribe(
+        data => {
 
-      const result = this.data.regEmployer(body).subscribe();
+          this.tokenStorage.saveToken(data.accessToken);
+          this.tokenStorage.saveUsername(data.username);
+          this.tokenStorage.saveAuthorities(data.authorities);
 
-      this.router.navigateByUrl("");
+          this.isLoggedIn = true;
+          this.isLoginFailed = false;
 
+          this.roles = this.tokenStorage.getAuthorities();
+
+          this.reloadPage();
+        },
+        error => {
+          console.log(error);
+
+          this.isLoginFailed = true;
+          this.errorMessage = error.error.message;
+        }
+      );
     }
   }
 
-  loginEmployer(login: String, password: String) : boolean{
 
-    if (this.loginAutoControl.valid && this.passwordAutoControl.valid){
+  registrationCompany(login: string, password: string, email: string, role: string,
+                      name: string, type: string, count: string, address: string,
+                      site: string, description: string) {
 
-      console.log(login + " " + password);
-      this.count_login++;
+    console.log(login, password, email, role, name, type, count, address, site, description);
 
+    if (this.loginControl.valid && this.mailControl.valid && this.passwordControl.valid
+      && this.password2Control && this.companyNameControl.valid && this.companyTypeControl.valid
+      && this.companyCountControl.valid && this.companyAddressControl.valid && this.companySiteControl.valid) {
+
+      this.signUpCompanyInfo = new SignUpCompanyInfo(login, password, email, [role],
+        name, type, count, address, site, description);
+
+      console.log(this.signUpCompanyInfo);
+
+      this.authService.signUp(this.signUpCompanyInfo).subscribe(
+        data => {
+          window.location.reload();
+          this.isRegistrationSuccess = true;
+        },
+        error => {
+          console.log(error);
+
+          this.isRegistrationFailed = true;
+          this.errorMessage = error.error.message;
+        }
+      );
     }
-
-    return this.error_login;
-
   }
 
+
+  reloadPage() {
+    window.location.replace("");
+  }
+
+  radioChange(event: MatRadioChange) {
+    this.userType = event.value;
+  }
 }

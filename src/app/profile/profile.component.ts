@@ -1,15 +1,19 @@
 import {Component, OnInit, Inject, ViewChild, ElementRef} from '@angular/core';
-import {DataService} from "../data.service";
 import {FormControl, Validators} from "@angular/forms";
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 
-import {Office} from "../Office";
-import {Employer} from "../Employer";
-import {ContactPerson} from "../ContactPerson";
-import {ContactType} from "../../ContactType";
-import {Vacancy} from "../Vacancy";
-import {FieldOfActivity} from "../FieldOfActivity";
+import {TokenStorageService} from "../auth/token-storage.service";
+import {EmployerService} from "../sevices/employer.service";
+import {Employer} from "../model/Employer";
+import {InfoService} from "../sevices/info.service";
+import {ContactPerson} from "../model/ContactPerson";
+import {ContactType} from "../model/ContactType";
+import {Contact} from "../model/Contact";
+import {Office} from "../model/Office";
+import {FieldOfActivity} from "../model/FieldOfActivity";
+import {Vacancy} from "../model/Vacancy";
+import {SpecializationVacancy} from "../model/SpecializationVacancy";
 
 export interface DialogData {
   id: number;
@@ -29,381 +33,256 @@ export interface DialogData {
 })
 export class ProfileComponent implements OnInit {
 
-  @ViewChild('city_office') cityOffice: ElementRef;
+  //display page content
+  pageInfo = true;
+  pageContact = false;
+  pageOffices = false;
+  pageVacancies = false;
+  pageSettings = false;
 
-  displayedColumns: string[] = ['city', 'address', 'description', 'icon'];
-  displayedContactsColumns: string[] = ['type', 'value', 'option'];
-  displayedVacancyFieldColumns: string[] = ['field_of_activity', 'specialization', 'option'];
-
-  disableSelect = new FormControl(true);
-  disableOfficeSelect = new FormControl(true);
-  disableVacancySelect = new FormControl(true);
-  disableContactSelect = new FormControl(true);
+  //disabled page content
+  disableInfo = new FormControl(true);
+  disableAddOffice = new FormControl(true);
+  disableAddVacancy = new FormControl(true);
+  disableAddContactPerson = new FormControl(true);
   disableAddContact = new FormControl(true);
   disableAddSpecialization = new FormControl(true);
 
-  infoNameControl = new FormControl(null, [Validators.required]);
+  //const
+  employer$: Employer;
+  employerTypes$: string[];
+  employerCounts$: string[];
+  employmentTypes$: string[];
+  contactTypes$: ContactType[];
+  fieldsOfActivities$: FieldOfActivity[];
 
-  employer_id = 1;
-
-  pointContactPerson = 0;
-  pointVacancy = 0;
-
-  employer$: Object;
-  types$: Object;
-  types_employment$: Object;
-  count$: Object;
-  offices$: Object;
-  vacancies$: Vacancy[];
-  contacts_person$: ContactPerson[];
-  contact_types$: ContactType[];
-  field_of_activity$: FieldOfActivity[];
-
+  //variable for page
+  employer: Employer = new Employer(null, null, null, null, null, null);
+  contactPersons: ContactPerson[];
+  contactPerson: ContactPerson =  new ContactPerson(null, null, null, null);
+  offices: Office[];
   office = new Office(null, null, null);
-  employer = new Employer(null, null, null, null, null, null, null, null);
-  contactPerson = new ContactPerson(null, null, null, null);
-  vacancy = new Vacancy(null, null, null, null, null, null,
-    null, null, new Office(null, null, null, null), null);
+  vacancies: Vacancy[];
+  vacancy: Vacancy = new Vacancy(null, null, null, null, null,
+    null, null, null, null, null,null);
 
-  page_info = true;
-  page_contact = false;
-  page_offices = false;
-  page_vacancies = false;
-  page_settings = false;
-
-  fnameControl = new FormControl('', [Validators.required]);
-  lnameControl = new FormControl('', [Validators.required]);
-
-  cityControl = new FormControl('', [Validators.required]);
-  addressControl = new FormControl('', [Validators.required]);
-
+  //Controls for Contact Persons
+  contactPersonFnameControl = new FormControl('', [Validators.required]);
+  contactPersonLnameControl = new FormControl('', [Validators.required]);
+  //Controls for Contacts Page
   contactTypeControl = new FormControl('', [Validators.required]);
   contactValueControl = new FormControl('', [Validators.required]);
-
+  //Controls for Offices Page
+  officeCityControl = new FormControl('', [Validators.required]);
+  officeAddressControl = new FormControl('', [Validators.required]);
+  //Controls for Specializations Page
   specializationTypeControl = new FormControl('', [Validators.required]);
   specializationValueControl = new FormControl('', [Validators.required]);
-
+  //Controls for Vacancy Page
   vacancyTitleControl = new FormControl('', [Validators.required, Validators.minLength(6)]);
   vacancyDescriptionControl = new FormControl('', [Validators.required]);
 
-  constructor(private data: DataService, public dialog: MatDialog) {
+  // Points
+  pointContactPerson = 0;
+  pointVacancy = 0;
+
+  // Display Columns
+  displayedColumnsForOffices: string[] = ['city', 'address', 'description', 'icon'];
+  displayedColumnsForContact: string[] = ['type', 'value', 'option'];
+  displayedColumnsForFields: string[] = ['field_of_activity', 'specialization', 'option'];
+
+  constructor(public dialog: MatDialog, private tokenStorage: TokenStorageService,
+              private empl: EmployerService, private info: InfoService) {
   }
 
   ngOnInit() {
 
-    this.data.getEmployer(this.employer_id).subscribe(
-      data => {
-        this.employer$ = data;
-        this.employer = data;
-      }
-    );
+    if (this.tokenStorage.getToken() && "COMPANY" === this.tokenStorage.getAuthority()) {
 
-    this.data.getTypesEmployer().subscribe(
-      data => this.types$ = data
-    );
+      this.info.getTypesEmployer().subscribe(
+        data => this.employerTypes$ = data
+      );
 
-    this.data.getCountEmployees().subscribe(
-      data => this.count$ = data
-    );
+      this.info.getCountsEmployer().subscribe(
+        data => this.employerCounts$ = data
+      );
 
-    this.data.getCompanyOffices(this.employer_id).subscribe(
-      data => this.offices$ = data
-    );
+      this.info.getContactTypes().subscribe(
+        data => this.contactTypes$ = data
+      );
 
-    this.data.getTypesEmployment().subscribe(
-      data => this.types_employment$ = data
-    );
+      this.info.getFieldsOfActivities().subscribe(
+        data => this.fieldsOfActivities$ = data
+      );
 
-    this.data.getCompanyVacancies(this.employer_id).subscribe(
-      data => this.vacancies$ = data
-    );
+      this.info.getEmploymentTypes().subscribe(
+        data => this.employmentTypes$ = data
+      );
 
-    this.data.getCompanyContactPersons(this.employer_id).subscribe(
-      data => this.contacts_person$ = data
-    );
+      this.empl.getEmployerForAccount().subscribe(
+        data => {
+          this.employer$ = data;
+          this.employer = data;
+          this.contactPersons = this.employer.contacts;
+          this.offices = this.employer.offices;
+          this.vacancies = this.employer.vacancies;
+        }
+      );
 
-    this.data.getContactTypes().subscribe(
-      data => this.contact_types$ = data
-    );
-
-    this.data.getFieldsOfActivity().subscribe(
-      data => this.field_of_activity$ = data
-    );
-
+    } else {
+      window.location.replace("");
+    }
   }
 
   // Info methods
 
   clearInfo() {
-    this.disableSelect.setValue(true);
-
-    console.log(this.employer);
+    this.disableInfo.setValue(true);
   }
 
-  editInfo(name: String, type: String, number_of_person: String, address: String, site: String, description: String) {
-
-    if (this.infoNameControl) {
-
-      if (site == "") site = null;
-      if (address == "") address = null;
-      if (description == "") description = null;
-
-      const body = {
-        "id": this.employer_id,
-        "name": name,
-        "type": type,
-        "number_of_person": "От 50 до 250",
-        "address": address,
-        "site": site,
-        "description": description
-      };
-
-      console.log(body);
-
-      this.data.regEmployer(body).subscribe(
-        data => {
-          this.data.getEmployer(this.employer_id).subscribe(
-            data => {
-              this.employer$ = data;
-              this.employer = data;
-            }
-          );
-        }
-      );
-
-      this.clearInfo();
-
-    }
+  backInfo() {
+    this.disableInfo.setValue(false);
   }
 
-  // Office methods
+  editInfo(name: string, type: string, number_of_person: string, address: string, site: string, description: string) {
 
-  saveOffice(city: String, address: String, description: String) {
+    if (site == "") site = null;
+    if (address == "") address = null;
+    if (description == "") description = null;
 
-    if (this.office.id == null) {
-      this.addOffice(city, address, description);
-    } else {
-      this.editOffice(this.office.id, city, address, description);
-    }
-
-  }
-
-  addOffice(city: String, address: String, description: String) {
-
-    if (this.cityControl.valid && this.addressControl.valid) {
-      if (description.trim().length == 0) description = null;
-
-      const body = {
-        "city": city,
-        "address": address,
-        "description": description,
-        "employer": {
-          "id": this.employer_id
-        }
-      }
-
-      console.log(body);
-
-      this.data.regOffice(body).subscribe(
-        data => this.data.getCompanyOffices(this.employer_id).subscribe(
-          data => this.offices$ = data
-        )
-      );
-
-      this.clearOffice();
-
-    }
-  }
-
-  editOffice(id: number, city: String, address: String, description: String) {
-
-    if (this.cityControl.valid && this.addressControl.valid) {
-      if (description.trim().length == 0) description = null;
-
-      const body = {
-        "id": id,
-        "city": city,
-        "address": address,
-        "description": description,
-        "employer": {
-          "id": this.employer_id
-        }
-      };
-
-      console.log(body);
-
-      this.data.regOffice(body).subscribe(
-        data => this.data.getCompanyOffices(this.employer_id).subscribe(
-          data => this.offices$ = data
-        )
-      );
-
-      this.clearOffice();
-
-    }
-
-  }
-
-  clearOffice() {
-
-    this.cityControl.reset();
-    this.addressControl.reset();
-
-    this.disableOfficeSelect.setValue(true);
-
-    this.office = new Office(null, null, null);
-  }
-
-  editOfficeDialog(element: Office) {
-
-    this.disableOfficeSelect.setValue(false);
-    this.office = new Office(element.city, element.address, element.description, element.id);
-
-  }
-
-  openDeleteOfficeDialog(id: number): void {
-    const dialogRef = this.dialog.open(DeleteOfficeDialog, {
-      width: '250px',
-      data: {id: id}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result != undefined) this.deleteOffice(result);
-    });
-  }
-
-  deleteOffice(id: number) {
-
-    this.data.delOffice(id).subscribe(
-      data => this.data.getCompanyOffices(this.employer_id).subscribe(
-        data => this.offices$ = data
-      )
+    this.empl.editEmployerForAccount(
+      new Employer(name, type, number_of_person, address, site, description)).subscribe(
+        data => this.clearInfo()
     );
+
+  }
+
+  // Menu methods
+
+  click_menu(id: number) {
+    switch (id) {
+      case 1:
+        this.clearPageContent();
+        this.pageInfo = true;
+        break;
+      case 2:
+        this.clearPageContent();
+        this.pageContact = true;
+        break;
+      case 3:
+        this.clearPageContent();
+        this.pageOffices = true;
+        break;
+      case 4:
+        this.clearPageContent();
+        this.pageVacancies = true;
+        break;
+      case 5:
+        this.clearPageContent();
+        this.pageSettings = true;
+        break;
+    }
+
+    this.clearContactPage();
+    this.clearOfficePage();
+    this.clearVacancyPage();
+  }
+
+  clearPageContent() {
+    this.pageInfo = false;
+    this.pageContact = false;
+    this.pageOffices = false;
+    this.pageVacancies = false;
+    this.pageSettings = false;
   }
 
   // Contact methods
 
-  saveContactPerson(fname: String, lname: String, faname: String) {
-
-    if (this.contactPerson.id == null) {
-      this.addContactPerson(fname, lname, faname);
-    } else {
-      this.editContactPerson(this.contactPerson.id, fname, lname, faname);
-    }
-
+  setPointContactPerson(index: number) {
+    this.pointContactPerson = index;
+    this.clearContact();
   }
 
-  addContactPerson(fname: String, lname: String, faname: String) {
+  saveContactPerson(fname: string, lname: string, faname: string) {
 
-    if (this.fnameControl.valid && this.lnameControl.valid) {
+    if (this.contactPersonFnameControl.valid && this.contactPersonLnameControl.valid) {
 
-      const body = {
-        "first_name": fname,
-        "last_name": lname,
-        "father_name": faname,
-        "employer": {
-          "id": this.employer_id
-        }
-      };
+      if (this.contactPerson.id == null) {
+        this.empl.saveContactPersonToAccount(new ContactPerson(
+          fname, lname, faname, null
+        )).subscribe(
+          data =>{
+            this.empl.getContactPersonForAccount().subscribe(
+              data => this.contactPersons = data
+            );
 
-      this.data.regContactPerson(body).subscribe(
-        data => {
-          this.data.getCompanyContactPersons(this.employer_id).subscribe(
-            data => this.contacts_person$ = data
-          );
-        }
-      );
-
-      this.clearContactPerson();
-    }
-  }
-
-  editContactPerson(id: number, fname: String, lname: String, faname: String) {
-
-    if (this.fnameControl.valid && this.lnameControl.valid) {
-
-      const body = {
-        "id": id,
-        "first_name": fname,
-        "last_name": lname,
-        "father_name": faname,
-        "employer": {
-          "id": this.employer_id
-        }
-      };
-
-      this.data.regContactPerson(body).subscribe(
-        data => {
-          this.data.getCompanyContactPersons(this.employer_id).subscribe(
-            data => this.contacts_person$ = data
-          );
-        }
-      );
-
-      this.clearContactPerson();
-    }
-
-  }
-
-  clearContactPerson() {
-    this.fnameControl.reset();
-    this.lnameControl.reset();
-
-    this.disableContactSelect.setValue(true);
-    this.contactPerson = new ContactPerson(null, null, null, null);
-  }
-
-  openDeleteContactPersonDialog(id: number): void {
-
-    const dialogRef = this.dialog.open(DeleteContactPersonDialog, {
-      width: '250px',
-      data: {id: id}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result != undefined) this.deleteContactPerson(result);
-    });
-  }
-
-  deleteContactPerson(id: number) {
-
-    this.data.delContactPerson(id).subscribe(
-      data => {
-        this.data.getCompanyContactPersons(this.employer_id).subscribe(
-          data => this.contacts_person$ = data
+            this.setPointContactPerson(data.id);
+          }
         );
       }
-    );
+      else {
+        this.empl.saveContactPersonToAccount(new ContactPerson(
+          fname, lname, faname, null, this.contactPerson.id
+        )).subscribe(
+          data =>{
+            this.empl.getContactPersonForAccount().subscribe(
+              data => this.contactPersons = data
+            );
+
+            this.setPointContactPerson(data.id);
+          }
+        );
+      }
+
+      this.clearContactPerson();
+    }
   }
 
   openEditContactPersonDialog(element: ContactPerson) {
 
-    this.contactPerson = new ContactPerson(element.first_name, element.last_name, element.father_name, element.contacts, element.id);
-    this.disableContactSelect.setValue(false);
+      this.contactPerson = new ContactPerson(element.first_name, element.last_name, element.father_name, element.contacts, element.id);
+      this.disableAddContactPerson.setValue(false);
 
-    this.setPointContactPerson(0);
+      this.setPointContactPerson(0);
 
-  }
+    }
+
+  openDeleteContactPersonDialog(id: number): void {
+
+      const dialogRef = this.dialog.open(DeleteContactPersonDialog, {
+        width: '250px',
+        data: {id: id}
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result != undefined) this.deleteContactPerson(result);
+      });
+    }
+
+  deleteContactPerson(id: number) {
+
+      this.empl.deleteContactPersonFromAccount(id).subscribe(
+        data => {
+          this.setPointContactPerson(0);
+
+          this.empl.getContactPersonForAccount().subscribe(
+            data => this.contactPersons = data
+          );
+        }
+      );
+    }
 
   createContact(id: number, value: string, contact_person_id: number) {
 
     if (this.contactTypeControl.valid && this.contactValueControl.valid) {
-      const body = {
-        "contact_type": {
-          "id": id
-        },
-        "contact_person": {
-          "id": contact_person_id
-        },
-        "value": value
-      };
 
-      this.data.addContactByContactPerson(body).subscribe(
-        data => {
-          this.data.getCompanyContactPersons(this.employer_id).subscribe(
-            data => this.contacts_person$ = data
-          );
-        }
+      this.empl.addContactToContactPerson(new Contact( new ContactPerson(null, null,
+        null, null), new ContactType(null, id), value, contact_person_id)).subscribe(
+          data => {
+            this.empl.getContactPersonForAccount().subscribe(
+              data => this.contactPersons = data
+            )
+          }
       );
 
       this.clearContact();
@@ -427,14 +306,21 @@ export class ProfileComponent implements OnInit {
 
   deleteContact(id: number): void {
 
-    this.data.delContactByContactPerson(id).subscribe(
+    this.empl.deleteContactFromContactPerson(id).subscribe(
       data => {
-        this.data.getCompanyContactPersons(this.employer_id).subscribe(
-          data => this.contacts_person$ = data
+        this.empl.getContactPersonForAccount().subscribe(
+          data => this.contactPersons = data
         );
       }
     );
+  }
 
+  clearContactPerson() {
+    this.contactPersonFnameControl.reset();
+    this.contactPersonLnameControl.reset();
+
+    this.disableAddContactPerson.setValue(true);
+    this.contactPerson = new ContactPerson(null, null, null, null);
   }
 
   clearContact(): void {
@@ -444,86 +330,95 @@ export class ProfileComponent implements OnInit {
     this.contactValueControl.reset();
   }
 
-  // Vacancy methods
+  clearContactPage(): void {
+    this.clearContact();
+    this.clearContactPerson();
+    this.setPointContactPerson(0);
+  }
 
-  saveVacancy(title: String, description: String, min_salary: number, max_salary: number, type_employment: String,
-              remove_work: number, experience_min: number, office_id: number) {
+  //Office methods
 
-    if (this.vacancy.id == null) {
-      this.addVacancy(title, description, min_salary, max_salary, type_employment, remove_work, experience_min, office_id);
-    } else {
-      this.editVacancy(this.vacancy.id, this.vacancy.status, title, description, min_salary, max_salary, type_employment,
-        remove_work, experience_min, office_id);
+  clearOffice() {
+
+    this.officeCityControl.reset();
+    this.officeAddressControl.reset();
+
+    this.disableAddOffice.setValue(true);
+
+    this.office = new Office(null, null, null, null);
+  }
+
+  saveOffice(city: string, address: string, description: string) {
+
+    if(this.officeCityControl.valid && this.officeCityControl.valid){
+      if (description.trim().length == 0) description = null;
+
+      if (this.office.id == null) {
+        this.empl.saveOfficeToAccount(new Office(city, address, description)).subscribe(
+          data => {
+            this.empl.getOfficesFromAccount().subscribe(
+              data => this.offices = data
+            )
+          }
+        );
+      } else {
+        this.empl.saveOfficeToAccount(new Office(city, address, description, this.office.id)).subscribe(
+          data => {
+            this.empl.getOfficesFromAccount().subscribe(
+              data => this.offices = data
+            )
+          }
+        );
+      }
+
+      this.clearOffice();
     }
+  }
+
+  editOfficeDialog(element: Office) {
+
+    this.disableAddOffice.setValue(false);
+    this.office = new Office(element.city, element.address, element.description, element.id);
 
   }
 
-  addVacancy(title: String, description: String, min_salary: number, max_salary: number, type_employment: String,
-             remove_work: number, experience_min: number, office_id: number) {
+  openDeleteOfficeDialog(id: number): void {
+    const dialogRef = this.dialog.open(DeleteOfficeDialog, {
+      width: '250px',
+      data: {id: id}
+    });
 
-    if (this.vacancyTitleControl.valid && this.vacancyDescriptionControl.valid) {
-
-      const body = {
-        "status": "Неактивна",
-        "title": title,
-        "description": description,
-        "salary_min": (min_salary == 0) ? null : min_salary,
-        "salary_max": (max_salary == 0) ? null : max_salary,
-        "remove_work": (remove_work != undefined) ? remove_work : null,
-        "type_employment": (type_employment != undefined) ? type_employment : null,
-        "experience_min": (experience_min == 0) ? null : experience_min,
-        "employer": {
-          "id": this.employer_id
-        },
-        "office": {
-          "id": "" == office_id.toString() ? null : office_id
-        }
-      };
-
-      this.data.regVacancy(body).subscribe(
-        data => this.data.getCompanyVacancies(this.employer_id).subscribe(
-          data => this.vacancies$ = data
-        )
-      );
-
-      this.clearVacancy();
-    }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != undefined) this.deleteOffice(result);
+    });
   }
 
-  editVacancy(id: number, status: String, title: String, description: String, min_salary: number, max_salary: number, type_employment: String,
-              remove_work: number, experience_min: number, office_id: number) {
+  deleteOffice(id: number) {
 
-    if (this.vacancyTitleControl.valid && this.vacancyDescriptionControl.valid) {
+    this.empl.deleteOfficeToAccount(id).subscribe(
+      data => this.empl.getOfficesFromAccount().subscribe(
+        data => this.offices = data
+      )
+    );
+  }
 
-      const body = {
-        "id": id,
-        "status": status,
-        "title": title,
-        "description": description,
-        "salary_min": (min_salary == 0) ? null : min_salary,
-        "salary_max": (max_salary == 0) ? null : max_salary,
-        "remove_work": (remove_work != undefined) ? remove_work : null,
-        "type_employment": (type_employment != undefined) ? type_employment : null,
-        "experience_min": (experience_min == 0) ? null : experience_min,
-        "employer": {
-          "id": this.employer_id
-        },
-        "office": {
-          "id": "" == office_id.toString() ? null : office_id
-        }
-      };
+  clearOfficePage(): void {
+    this.clearOffice();
+  }
 
-      this.data.regVacancy(body).subscribe(
-        data => this.data.getCompanyVacancies(this.employer_id).subscribe(
-          data => this.vacancies$ = data
-        )
-      );
+  //Vacancy methods
 
-      this.clearVacancy();
+  setPointVacancy(index: number) {
+    this.pointVacancy = index;
+    this.clearSpecialization();
+  }
 
-      this.setPointVacancy(id);
-    }
+  openCreateVacancyDialog() {
+    this.disableAddVacancy.setValue(false);
+    this.setPointVacancy(0);
 
+    this.vacancy = new Vacancy(null, null, null, null, null, null,
+      null, null, null, null, null);
   }
 
   openEditVacancyDialog(vacancy: Vacancy): void {
@@ -531,8 +426,61 @@ export class ProfileComponent implements OnInit {
     this.vacancy = vacancy;
 
     this.setPointVacancy(0);
-    this.disableVacancySelect.setValue(false);
+    this.disableAddVacancy.setValue(false);
 
+  }
+
+  saveVacancy(title: string, description: string, min_salary: number, max_salary: number, type_employment: string,
+              remove_work: boolean, experience_min: number, office_id: number) {
+
+    if (this.vacancyTitleControl.valid && this.vacancyDescriptionControl.valid) {
+
+      if (this.vacancy.id == null) {
+        this.empl.saveVacancyToAccount(new Vacancy(
+          "Неактивна",
+          title,
+          description,
+          (min_salary == 0) ? null : min_salary,
+          (max_salary == 0) ? null : max_salary,
+          (remove_work != undefined) ? remove_work : null,
+          (type_employment != undefined) ? type_employment : null,
+          (experience_min == 0) ? null : experience_min,
+          (office_id != null)? new Office(null, null, null, office_id) : null,
+          null
+        )).subscribe(
+          data => {
+            this.empl.getVacanciesFromAccount().subscribe(
+              data => this.vacancies = data
+            );
+
+            this.setPointVacancy(data.id);
+          }
+        );
+      } else {
+        this.empl.saveVacancyToAccount(new Vacancy(
+          "Неактивна",
+          title,
+          description,
+          (min_salary == 0) ? null : min_salary,
+          (max_salary == 0) ? null : max_salary,
+          (remove_work != undefined) ? remove_work : null,
+          (type_employment != undefined) ? type_employment : null,
+          (experience_min == 0) ? null : experience_min,
+          (office_id != null)? new Office(null, null, null, office_id) : null,
+          null, null, this.vacancy.id
+        )).subscribe(
+          data => {
+            this.empl.getVacanciesFromAccount().subscribe(
+              data => this.vacancies = data
+            );
+
+            this.setPointVacancy(data.id);
+          }
+        );
+      }
+
+      this.clearVacancy();
+    }
   }
 
   openDeleteVacancyDialog(id: number): void {
@@ -548,26 +496,33 @@ export class ProfileComponent implements OnInit {
 
   deleteVacancy(id: number) {
 
-    this.data.delVacancy(id).subscribe(
-      data => this.data.getCompanyVacancies(this.employer_id).subscribe(
-        data => this.vacancies$ = data
+    this.empl.deleteVacancyFromAccount(id).subscribe(
+      data => this.empl.getVacanciesFromAccount().subscribe(
+        data => this.vacancies = data
       )
     );
   }
 
-  openNewVacancyDialog(){
-    this.disableVacancySelect.setValue(false);
-    this.setPointVacancy(0);
+  clearVacancy() {
 
-    this.vacancy = new Vacancy(null, null, null, null, null, null,
-      null, null, new Office(null, null, null, null), null);
+    this.vacancyTitleControl.reset();
+    this.vacancyDescriptionControl.reset();
+
+    this.disableAddVacancy.setValue(true);
+  }
+
+  clearSpecialization(): void {
+    this.specializationTypeControl.reset();
+    this.specializationValueControl.reset();
+
+    this.disableAddSpecialization.setValue(true);
   }
 
   editStatusVacancy(id: number) {
 
-    this.data.editStatusVacancy(id).subscribe(
-      data => this.data.getCompanyVacancies(this.employer_id).subscribe(
-        data => this.vacancies$ = data
+    this.empl.editStatusToVacancy(id).subscribe(
+      data => this.empl.getVacanciesFromAccount().subscribe(
+        data => this.vacancies = data
       )
     )
   }
@@ -576,27 +531,17 @@ export class ProfileComponent implements OnInit {
 
     if (this.specializationValueControl.valid && this.specializationTypeControl) {
 
-      const body = {
-        "field_of_activity": {
-          "id": id
-        },
-        "vacancy": {
-          "id": vacancy_id
-        },
-        "specialization": value
-      };
-
-      this.data.addSpecializationByVacancy(body).subscribe(
+      this.empl.saveSpecializationToVacancy(new SpecializationVacancy(
+        null, new FieldOfActivity(null, id), value, vacancy_id)).subscribe(
         data => {
-          this.data.getCompanyVacancies(this.employer_id).subscribe(
-            data => this.vacancies$ = data
-          );
+          this.empl.getVacanciesFromAccount().subscribe(
+            data => this.vacancies = data
+          )
         }
       );
 
       this.clearSpecialization();
     }
-
   }
 
   openDeleteSpecificationDialog(id: number): void {
@@ -615,99 +560,19 @@ export class ProfileComponent implements OnInit {
 
   deleteSpecialization(id: number): void {
 
-    this.data.delSpecializationByVacancy(id).subscribe(
+    this.empl.deleteSpecializationsFromVacancy(id).subscribe(
       data => {
-        this.data.getCompanyVacancies(this.employer_id).subscribe(
-          data => this.vacancies$ = data
-        );
+        this.empl.getVacanciesFromAccount().subscribe(
+          data => this.vacancies = data
+        )
       }
     );
   }
 
-  clearSpecialization(): void {
-    this.specializationTypeControl.reset();
-    this.specializationValueControl.reset();
-
-    this.disableAddSpecialization.setValue(true);
-  }
-
-  setPointVacancy(index: number) {
-    this.pointVacancy = index;
+  clearVacancyPage(){
+    this.clearVacancy();
     this.clearSpecialization();
   }
-
-
-  backInfo() {
-    this.disableSelect.setValue(false)
-  }
-
-  clearVacancy() {
-
-    this.vacancyTitleControl.reset();
-    this.vacancyDescriptionControl.reset();
-
-    this.disableVacancySelect.setValue(true);
-  }
-
-  click_menu(id: number) {
-    switch (id) {
-      case 1:
-        this.page_info = true;
-        this.page_contact = false;
-        this.page_offices = false;
-        this.page_vacancies = false;
-        this.page_settings = false;
-        this.disableOfficeSelect.setValue(true);
-        break;
-      case 2:
-        this.page_info = false;
-        this.page_contact = true;
-        this.page_offices = false;
-        this.page_vacancies = false;
-        this.page_settings = false;
-        this.disableSelect.setValue(true);
-        break;
-      case 3:
-        this.page_info = false;
-        this.page_contact = false;
-        this.page_offices = true;
-        this.page_vacancies = false;
-        this.page_settings = false;
-        this.disableSelect.setValue(true);
-        break;
-      case 4:
-        this.page_info = false;
-        this.page_contact = false;
-        this.page_offices = false;
-        this.page_vacancies = true;
-        this.page_settings = false;
-        this.disableSelect.setValue(true);
-        this.disableOfficeSelect.setValue(true);
-        break;
-      case 5:
-        this.page_info = false;
-        this.page_contact = false;
-        this.page_offices = false;
-        this.page_vacancies = false;
-        this.page_settings = true;
-        this.disableSelect.setValue(true);
-        this.disableOfficeSelect.setValue(true);
-        break;
-    }
-    ;
-
-    this.setPointContactPerson(0);
-    this.setPointVacancy(0)
-    this.clearContactPerson();
-    this.clearVacancy();
-
-  }
-
-  setPointContactPerson(index: number) {
-    this.pointContactPerson = index;
-    this.clearContact();
-  }
-
 }
 
 

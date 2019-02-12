@@ -2,9 +2,10 @@
     <mat-toolbar-row>
       <span> <a mat-button routerLink="">Главная</a></span>
       <span class="example-spacer"></span>
-      <button mat-flat-button color="accent" routerLink="/autorization">Авторизоваться</button>
-      <button mat-flat-button class="my_profile" color="accent" routerLink="/my_profile">Профиль</button>
+
+      <button *ngIf="authority === 'COMPANY'" mat-flat-button class="my_profile" color="accent" routerLink="/company_profile">{{username}}</button>
+      <button *ngIf="!authority" mat-flat-button color="accent" routerLink="/autorization">Авторизоваться</button>
+      <button *ngIf="authority" mat-flat-button color="accent" (click)="logOut()">Выход</button>
+
     </mat-toolbar-row>
   </mat-toolbar>
-
-

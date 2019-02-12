@@ -60,15 +60,16 @@ import { VacancyComponent } from './vacancy/vacancy.component';
 import { VacanciesComponent } from './vacancies/vacancies.component';
 import { EmployerComponent } from './employer/employer.component';
 import { OfficeCardComponent } from './office-card/office-card.component';
+import { httpInterceptorProviders } from "./auth/auth-interceptor";
 
 const routs = [
   {path: '', component: HomePageComponent},
   {path: 'autorization', component: AutorizationComponent},
-  {path: 'my_profile', component: ProfileComponent},
-  {path: 'vacancy/:id', component: VacancyComponent},
-  {path: 'vacancies', component: VacanciesComponent},
-  {path: 'employer/:id', component: EmployerComponent},
-  {path: 'employer/:id/vacancy/:id', redirectTo: 'vacancy/:id', pathMatch: 'full' }
+  {path: 'company_profile', component: ProfileComponent},
+  // {path: 'vacancy/:id', component: VacancyComponent},
+  // {path: 'vacancies', component: VacanciesComponent},
+  // {path: 'employer/:id', component: EmployerComponent},
+  // {path: 'employer/:id/vacancy/:id', redirectTo: 'vacancy/:id', pathMatch: 'full' }
 ];
 
 @NgModule({
@@ -132,7 +133,7 @@ const routs = [
     MatTooltipModule,
     MatTreeModule
   ],
-  providers: [],
+  providers: [httpInterceptorProviders],
   entryComponents: [
     ProfileComponent,
     DeleteOfficeDialog,

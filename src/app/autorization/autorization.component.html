@@ -4,6 +4,11 @@
     <mat-tab label="Вход">
 
       <form class="registration-form">
+
+        <p *ngIf="isRegistrationSuccess">
+          <span>Пользователь успешно зарегистрирован! Войдите в систему!</span>
+        </p>
+
         <p>
           <mat-form-field appearance="outline">
             <mat-label>Логин</mat-label>
@@ -23,11 +28,13 @@
           </mat-form-field>
         </p>
 
-        <p *ngIf="result_login != true && count_login > 0">
+        <p *ngIf="isLoginFailed">
           <span>Неверный логин или пароль!</span>
         </p>
 
-        <button class="test" mat-raised-button color="primary" (click)="loginEmployer(login_auto.value, password_auto.value)">Вход</button>
+        <button class="test" mat-raised-button color="primary"
+                (click)="loginEmployer(login_auto.value, password_auto.value)">Вход
+        </button>
       </form>
 
     </mat-tab>
@@ -46,6 +53,22 @@
           </mat-form-field>
         </p>
 
+        <p>
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput #email placeholder="Введите адрес электронной почты" [formControl]="mailControl" required>
+            <mat-icon matSuffix>event_note</mat-icon>
+            <mat-error *ngIf="mailControl.hasError('required')">Поле Email должно быть обязательно заполнено
+            </mat-error>
+          </mat-form-field>
+        </p>
+
+        <p>
+          <mat-radio-group #usertype [ngModel]="userType" name="userType" (change)="radioChange($event)">
+            <mat-radio-button value="user"> Соискатель</mat-radio-button>
+            <mat-radio-button value="company"> Компания</mat-radio-button>
+          </mat-radio-group>
+        </p>
 
         <p>
           <mat-form-field appearance="outline">
@@ -72,35 +95,52 @@
 
         <hr>
 
+
+        <!-- User registration form -->
+
+
+        <!-- Company registration form -->
+
         <p>
           <mat-form-field appearance="outline">
             <mat-label>Название</mat-label>
-            <input matInput #name_emp placeholder="Введите название компании" [formControl]="nameControl" required>
+            <input matInput #name_emp placeholder="Введите название компании" [formControl]="companyNameControl"
+                   required minlength="3" maxlength="50">
             <mat-icon matSuffix>event_note</mat-icon>
-            <mat-error *ngIf="nameControl.hasError('required')">Название компании должно быть обязательно заполнено
+            <mat-error *ngIf="companyNameControl.hasError('required')">
+              Название компании должно быть обязательно заполнено
+            </mat-error>
+            <mat-error *ngIf="companyNameControl.hasError('minlength')">
+              Количество символов должно быть от 3 до 50 символов
+            </mat-error>
+            <mat-error *ngIf="companyNameControl.hasError('maxlength')">
+              Количество символов должно быть от 3 до 50 символов
             </mat-error>
           </mat-form-field>
         </p>
 
         <p>
           <mat-form-field>
-            <mat-select #type_emp placeholder="Тип компании" [formControl]="typeControl" required>
-              <mat-option *ngFor="let type of types$" [value]=type>
+            <mat-select #type_emp placeholder="Тип компании" [formControl]="companyTypeControl" required>
+              <mat-option *ngFor="let type of $companyTypes" [value]=type>
                 {{type}}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="typeControl.hasError('required')">Тип должен быть обязательно выбран</mat-error>
+            <mat-error *ngIf="companyTypeControl.hasError('required')">
+              Тип должен быть обязательно выбран
+            </mat-error>
           </mat-form-field>
         </p>
 
         <p>
           <mat-form-field>
-            <mat-select #count_emp placeholder="Количество человек" [formControl]="countControl" required>
-              <mat-option *ngFor="let count of count$" [value]=count>
+            <mat-select #count_emp placeholder="Количество человек" [formControl]="companyCountControl" required>
+              <mat-option *ngFor="let count of $companyCounts" [value]=count>
                 {{count}}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="countControl.hasError('required')">Размер компании должен быть обязательно выбран
+            <mat-error *ngIf="companyCountControl.hasError('required')">
+              Размер компании должен быть обязательно выбран
             </mat-error>
           </mat-form-field>
         </p>
@@ -108,16 +148,22 @@
         <p>
           <mat-form-field appearance="outline">
             <mat-label>Адрес</mat-label>
-            <input matInput #address_emp placeholder="Введите адрес компании">
+            <input matInput #address_emp placeholder="Введите адрес компании"
+                   [formControl]="companyAddressControl" maxlength="250">
             <mat-icon matSuffix>map</mat-icon>
+            <mat-error *ngIf="companyAddressControl.hasError('maxlength')">
+
+            </mat-error>
           </mat-form-field>
         </p>
 
         <p>
           <mat-form-field appearance="outline">
             <mat-label>Сайт</mat-label>
-            <input matInput #site_emp placeholder="Введите адрес сайта">
+            <input matInput #site_emp placeholder="Введите адрес сайта"
+                   [formControl]="companySiteControl" maxlength="250">
             <mat-icon matSuffix>language</mat-icon>
+            <mat-error *ngIf="companySiteControl.hasError('maxlength')"></mat-error>
           </mat-form-field>
         </p>
 
@@ -129,12 +175,20 @@
           </mat-form-field>
         </p>
 
+        <p *ngIf="isRegistrationFailed">
+          <span>Ошибка регистрации, обратитесь к администратору!</span>
+        </p>
+
         <button class="test" mat-raised-button color="primary"
-                (click)="regCompany(login.value, password.value, name_emp.value, type_emp.value, count_emp.value,
-                address_emp.value, site_emp.value, description_emp.value)">Регистрация</button>
+                (click)="registrationCompany(login.value, password.value, email.value, userType, name_emp.value,
+                type_emp.value, count_emp.value, address_emp.value, site_emp.value, description_emp.value)">
+          Регистрация
+        </button>
+
       </form>
 
     </mat-tab>
+
   </mat-tab-group>
 </mat-card>
 

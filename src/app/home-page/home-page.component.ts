@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from '../data.service';
 
 export interface InfoCompany {
   id: string;
@@ -17,17 +16,17 @@ export class HomePageComponent implements OnInit {
   employers$: Object;
   vacancies$: Object;
 
-  constructor(private data: DataService) { }
+  constructor() { }
 
   ngOnInit() {
 
-    this.data.getEmployers().subscribe(
-      data => this.employers$ = data
-    );
-
-    this.data.getVacancies().subscribe(
-      data => this.vacancies$ = data
-    );
+    // this.data.getEmployers().subscribe(
+    //   data => this.employers$ = data
+    // );
+    //
+    // this.data.getVacancies().subscribe(
+    //   data => this.vacancies$ = data
+    // );
 
   }
 

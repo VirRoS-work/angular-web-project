@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {TokenStorageService} from "../auth/token-storage.service";
 
 @Component({
   selector: 'app-bar-menu',
@@ -7,10 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BarMenuComponent implements OnInit {
 
-  constructor() { }
+  private username: string = "";
+  private authority: string = undefined;
+
+  constructor(private tokenStorage: TokenStorageService) { }
 
   ngOnInit() {
+    if(this.tokenStorage.getToken()) {
+      this.username = this.tokenStorage.getUsername();
+      this.authority = this.tokenStorage.getAuthority();
+    }
+  }
 
+  logOut() {
+    this.tokenStorage.signOut();
+    window.location.reload();
   }
 
 }
