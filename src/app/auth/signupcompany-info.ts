@@ -9,9 +9,9 @@ export class SignUpCompanyInfo {
   site: string;
   description: string;
 
-  constructor(username: string, password: string, email: string, role: string[], name: string,
+  constructor(username: string, password: string, email: string, name: string,
               type: string, count: string, address: string, site: string, description: string) {
-    this.signUpForm = new SignUpInfo(username, password, email, role);
+    this.signUpForm = new SignUpInfo(username, password, email, ['company']);
     this.name = name;
     this.type = type;
     this.count = count;

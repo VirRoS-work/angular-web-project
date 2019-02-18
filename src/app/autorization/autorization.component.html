@@ -39,7 +39,112 @@
 
     </mat-tab>
 
-    <mat-tab label="Регистрация">
+    <mat-tab label="Регистрация соискателя">
+
+      <form class="registration-form">
+
+        <br/>
+        <mat-form-field appearance="outline">
+          <mat-label>Логин</mat-label>
+          <input matInput #user_login placeholder="Придумайте логин" [formControl]="loginUserControl"
+                 required minlength="6" maxlength="50">
+          <mat-icon matSuffix>event_note</mat-icon>
+          <mat-error *ngIf="loginUserControl.hasError('required')">Логин обязателен для заполнения</mat-error>
+          <mat-error *ngIf="loginUserControl.hasError('minlength')">Количество символов должно быть не менее 6
+          </mat-error>
+          <mat-error *ngIf="loginUserControl.hasError('maxlength')">Количество символов должно быть не более 50
+          </mat-error>
+        </mat-form-field> <!-- user login -->
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput #user_email placeholder="Введите адрес электронной почты" [formControl]="mailUserControl"
+                 required>
+          <mat-icon matSuffix>event_note</mat-icon>
+          <mat-error *ngIf="mailUserControl.hasError('required')">Поле Email должно быть обязательно заполнено
+          </mat-error>
+        </mat-form-field> <!-- user email -->
+        <mat-form-field appearance="outline">
+          <mat-label>Пароль</mat-label>
+          <input matInput #user_password placeholder="Придумайте пароль"
+                 [type]="hideUserPassword ? 'password' : 'text'"
+                 [formControl]="passwordUserControl" required minlength="6">
+          <mat-icon matSuffix (click)="hideUserPassword = !hideUserPassword">
+            {{hideUserPassword ? 'visibility' : 'visibility_off'}}
+          </mat-icon>
+          <mat-error *ngIf="passwordUserControl.hasError('required')">Пароль обязателен для заполнения</mat-error>
+          <mat-error *ngIf="passwordUserControl.hasError('minlength')">Количество символов должно быть не менее 6
+          </mat-error>
+        </mat-form-field> <!-- user password -->
+        <mat-form-field appearance="outline">
+          <mat-label>Повторите пароль</mat-label>
+          <input matInput #user_password2 placeholder="Повторите пароль"
+                 [type]="hideUserPassword2 ? 'password' : 'text'"
+                 [formControl]="password2UserControl" required>
+          <mat-icon matSuffix (click)="hideUserPassword2 = !hideUserPassword2">
+            {{hideUserPassword2 ? 'visibility' : 'visibility_off'}}
+          </mat-icon>
+          <mat-error *ngIf="password2UserControl.hasError('required')">Пароль обязателен для заполнения</mat-error>
+          <mat-error *ngIf="password2.value.toString() != password2.value.toString()">Пароли не совпадают</mat-error>
+        </mat-form-field> <!-- user password2 -->
+
+        <hr>
+
+        <br/>
+        <mat-form-field appearance="outline">
+          <mat-label>Имя</mat-label>
+          <input matInput #user_fname placeholder="Введите имя" [formControl]="userFirstNameControl" required>
+          <mat-icon matSuffix>event_note</mat-icon>
+          <mat-error *ngIf="userFirstNameControl.hasError('required')">
+            Поле обязательно для заполнения
+          </mat-error>
+        </mat-form-field> <!-- user first name -->
+        <mat-form-field appearance="outline">
+          <mat-label>Фамилия</mat-label>
+          <input matInput #user_lname placeholder="Введите фамилию" [formControl]="userLastNameControl" required>
+          <mat-icon matSuffix>event_note</mat-icon>
+          <mat-error *ngIf="userLastNameControl.hasError('required')">
+            Поле обязательно для заполнения
+          </mat-error>
+        </mat-form-field> <!-- user last name -->
+        <mat-form-field appearance="outline">
+          <mat-label>Отчество</mat-label>
+          <input matInput name="faname_contact" #user_faname placeholder="Введите отчество">
+          <mat-icon matSuffix>event_note</mat-icon>
+        </mat-form-field> <!-- user father name -->
+        <mat-form-field>
+          <mat-select #user_sex placeholder="Пол" [formControl]="userSexControl" required>
+            <mat-option [value]=true> Мужской </mat-option>
+            <mat-option [value]=false> Женский </mat-option>
+          </mat-select>
+          <mat-error *ngIf="userSexControl.hasError('required')">
+            Пол должен быть обязательно выбран
+          </mat-error>
+        </mat-form-field> <!-- user sex -->
+        <mat-form-field>
+          <mat-label>Дата рождения</mat-label>
+          <input matInput #user_date_of_birthday [matDatepicker]="picker" placeholder="Выберите дату"
+                 [formControl]="userDateOfBirthdayControl" required>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="userDateOfBirthdayControl.hasError('required')">
+            Поле обязательно для заполнения
+          </mat-error>
+        </mat-form-field> <!-- user date of birthday -->
+
+        <p *ngIf="isRegistrationUserFailed">
+          <span>Ошибка регистрации, обратитесь к администратору!</span>
+        </p> <!-- user error registration -->
+
+        <button class="test" mat-raised-button color="primary"
+                (click)="registrationUser(user_login.value, user_password.value, user_email.value, user_fname.value,
+                user_lname.value, user_faname.value, user_sex.value, user_date_of_birthday.value)">
+          Регистрация
+        </button> <!-- user registration button -->
+
+      </form> <!-- User registration form -->
+    </mat-tab> <!-- user registration tab -->
+
+    <mat-tab label="Регистрация компании">
 
       <form class="registration-form">
 
@@ -61,13 +166,6 @@
             <mat-error *ngIf="mailControl.hasError('required')">Поле Email должно быть обязательно заполнено
             </mat-error>
           </mat-form-field>
-        </p>
-
-        <p>
-          <mat-radio-group #usertype [ngModel]="userType" name="userType" (change)="radioChange($event)">
-            <mat-radio-button value="user"> Соискатель</mat-radio-button>
-            <mat-radio-button value="company"> Компания</mat-radio-button>
-          </mat-radio-group>
         </p>
 
         <p>
@@ -94,11 +192,6 @@
         </p>
 
         <hr>
-
-
-        <!-- User registration form -->
-
-
         <!-- Company registration form -->
 
         <p>
@@ -180,7 +273,7 @@
         </p>
 
         <button class="test" mat-raised-button color="primary"
-                (click)="registrationCompany(login.value, password.value, email.value, userType, name_emp.value,
+                (click)="registrationCompany(login.value, password.value, email.value, name_emp.value,
                 type_emp.value, count_emp.value, address_emp.value, site_emp.value, description_emp.value)">
           Регистрация
         </button>

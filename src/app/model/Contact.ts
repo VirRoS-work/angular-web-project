@@ -14,5 +14,4 @@ export class Contact {
     this.value = value;
     this.id = id;
   }
-
 }

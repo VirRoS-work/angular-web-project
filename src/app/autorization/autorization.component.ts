@@ -7,6 +7,8 @@ import {AuthLoginInfo} from "../auth/login-info";
 import {MatRadioChange} from "@angular/material";
 import {SignUpCompanyInfo} from "../auth/signupcompany-info";
 import {InfoService} from "../sevices/info.service";
+import {SignUpApplicantInfo} from "../auth/signupapplicant-info";
+import {SignUpInfo} from "../auth/signup-info";
 
 @Component({
   selector: 'app-autorization',
@@ -17,6 +19,8 @@ export class AutorizationComponent implements OnInit {
 
   isLoggedIn = false;
   isLoginFailed = false;
+  isRegistrationUserFailed = false;
+  isRegistrationUserSuccess = false;
   isRegistrationFailed = false;
   isRegistrationSuccess = false;
   errorMessage = '';
@@ -24,8 +28,7 @@ export class AutorizationComponent implements OnInit {
   roles: string[] = [];
   private loginInfo: AuthLoginInfo;
   private signUpCompanyInfo: SignUpCompanyInfo;
-
-  userType: string = "user";
+  private signUpApplicantInfo: SignUpApplicantInfo;
 
   //login control
   loginAutoControl = new FormControl('', [Validators.required]);
@@ -38,6 +41,16 @@ export class AutorizationComponent implements OnInit {
   password2Control = new FormControl('', [Validators.required]);
 
   //user control
+  loginUserControl = new FormControl('',
+    [Validators.required, Validators.minLength(6), Validators.maxLength(50)]);
+  mailUserControl = new FormControl('', [Validators.required]);
+  passwordUserControl = new FormControl('', [Validators.required, Validators.minLength(6)]);
+  password2UserControl = new FormControl('', [Validators.required, Validators.minLength(6)]);
+  //user info control
+  userFirstNameControl = new FormControl('', [Validators.required]);
+  userLastNameControl = new FormControl('', [Validators.required]);
+  userSexControl = new FormControl('', [Validators.required]);
+  userDateOfBirthdayControl = new FormControl('', [Validators.required]);
 
   //company control
   companyNameControl = new FormControl('',
@@ -49,6 +62,8 @@ export class AutorizationComponent implements OnInit {
 
   hide = true;
   hide2 = true;
+  hideUserPassword = true;
+  hideUserPassword2 = true;
   $companyTypes: string[];
   $companyCounts: string[];
 
@@ -101,22 +116,18 @@ export class AutorizationComponent implements OnInit {
   }
 
 
-  registrationCompany(login: string, password: string, email: string, role: string,
+  registrationCompany(login: string, password: string, email: string,
                       name: string, type: string, count: string, address: string,
                       site: string, description: string) {
-
-    console.log(login, password, email, role, name, type, count, address, site, description);
 
     if (this.loginControl.valid && this.mailControl.valid && this.passwordControl.valid
       && this.password2Control && this.companyNameControl.valid && this.companyTypeControl.valid
       && this.companyCountControl.valid && this.companyAddressControl.valid && this.companySiteControl.valid) {
 
-      this.signUpCompanyInfo = new SignUpCompanyInfo(login, password, email, [role],
+      this.signUpCompanyInfo = new SignUpCompanyInfo(login, password, email,
         name, type, count, address, site, description);
 
-      console.log(this.signUpCompanyInfo);
-
-      this.authService.signUp(this.signUpCompanyInfo).subscribe(
+      this.authService.signUpCompany(this.signUpCompanyInfo).subscribe(
         data => {
           window.location.reload();
           this.isRegistrationSuccess = true;
@@ -131,12 +142,36 @@ export class AutorizationComponent implements OnInit {
     }
   }
 
+  registrationUser(login: string, password: string, email: string,
+                   first_name: string, last_name: string, father_name: string, sex: boolean, date_of_birthday: string){
+
+    if(this.loginUserControl.valid && this.mailUserControl.valid && this.passwordUserControl.valid
+      && this.password2UserControl.valid && this.userFirstNameControl.valid && this.userLastNameControl.valid
+    && this.userSexControl.valid && this.userDateOfBirthdayControl.valid)
+    {
+      this.signUpApplicantInfo = new SignUpApplicantInfo(login, password, email,
+        first_name, last_name, father_name, sex, new Date(date_of_birthday)
+      );
+
+      console.log(this.signUpApplicantInfo);
+
+      this.authService.signUpApplicant(this.signUpApplicantInfo). subscribe(
+        data => {
+          window.location.reload();
+          this.isRegistrationUserSuccess = true;
+        },
+        error => {
+          console.log(error);
+
+          this.isRegistrationUserFailed = true;
+          this.errorMessage = error.error.message;
+        }
+      )
+    }
+  }
 
   reloadPage() {
     window.location.replace("");
   }
 
-  radioChange(event: MatRadioChange) {
-    this.userType = event.value;
-  }
 }

@@ -8,8 +8,8 @@ import {TokenStorageService} from "../auth/token-storage.service";
 })
 export class BarMenuComponent implements OnInit {
 
-  private username: string = "";
-  private authority: string = undefined;
+  username: string;
+  authority: string;
 
   constructor(private tokenStorage: TokenStorageService) { }
 
@@ -22,7 +22,7 @@ export class BarMenuComponent implements OnInit {
 
   logOut() {
     this.tokenStorage.signOut();
-    window.location.reload();
+    window.location.replace("");
   }
 
 }

@@ -3,9 +3,31 @@
       <span> <a mat-button routerLink="">Главная</a></span>
       <span class="example-spacer"></span>
 
-      <button *ngIf="authority === 'COMPANY'" mat-flat-button class="my_profile" color="accent" routerLink="/company_profile">{{username}}</button>
+      <button *ngIf="authority === 'USER'" mat-button [matMenuTriggerFor]="userMenu">{{username}}</button>
+      <mat-menu #userMenu = "matMenu">
+        <button mat-menu-item routerLink="/user_profile">
+          <mat-icon>person</mat-icon>
+          <span>Профиль</span>
+        </button>
+        <button mat-menu-item (click)="logOut()">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Выход</span>
+        </button>
+      </mat-menu>
+
+      <button *ngIf="authority === 'COMPANY'" mat-button [matMenuTriggerFor]="companyMenu">{{username}}</button>
+      <mat-menu #companyMenu = "matMenu">
+        <button mat-menu-item routerLink="/company_profile">
+          <mat-icon>people</mat-icon>
+          <span>Профиль</span>
+        </button>
+        <button mat-menu-item (click)="logOut()">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Выход</span>
+        </button>
+      </mat-menu>
+
       <button *ngIf="!authority" mat-flat-button color="accent" routerLink="/autorization">Авторизоваться</button>
-      <button *ngIf="authority" mat-flat-button color="accent" (click)="logOut()">Выход</button>
 
     </mat-toolbar-row>
   </mat-toolbar>

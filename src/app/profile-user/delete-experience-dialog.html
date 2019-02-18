@@ -1,0 +1,7 @@
+<div mat-dialog-content class="delete-dialog">
+  <h4 class="delete-dialog-content">Вы действительно хотите удалить информацию об опыте работы?</h4>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="data.id" cdkFocusInitial>Ok</button>
+  <button mat-button (click)="onNoClick()">Отмена</button>
+</div>

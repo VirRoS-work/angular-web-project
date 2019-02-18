@@ -55,17 +55,26 @@ import {
   DeleteContactDialog,
   DeleteSpecificationDialog
 } from './profile/profile.component';
+import {
+  DeleteContactApplicantDialog,
+  DeleteEducationDialog,
+  DeleteExperienceDialog,
+  DeleteLanguageSkillDialog,
+  DeleteSportSkillDialog
+} from "./profile-user/profile-user.component";
 import { VacancyCardComponent } from './vacancy-card/vacancy-card.component';
 import { VacancyComponent } from './vacancy/vacancy.component';
 import { VacanciesComponent } from './vacancies/vacancies.component';
 import { EmployerComponent } from './employer/employer.component';
 import { OfficeCardComponent } from './office-card/office-card.component';
 import { httpInterceptorProviders } from "./auth/auth-interceptor";
+import { ProfileUserComponent } from './profile-user/profile-user.component';
 
 const routs = [
   {path: '', component: HomePageComponent},
   {path: 'autorization', component: AutorizationComponent},
   {path: 'company_profile', component: ProfileComponent},
+  {path: 'user_profile', component:ProfileUserComponent}
   // {path: 'vacancy/:id', component: VacancyComponent},
   // {path: 'vacancies', component: VacanciesComponent},
   // {path: 'employer/:id', component: EmployerComponent},
@@ -84,11 +93,17 @@ const routs = [
     DeleteContactPersonDialog,
     DeleteContactDialog,
     DeleteSpecificationDialog,
+    DeleteLanguageSkillDialog,
+    DeleteExperienceDialog,
+    DeleteSportSkillDialog,
+    DeleteContactApplicantDialog,
+    DeleteEducationDialog,
     VacancyCardComponent,
     VacancyComponent,
     VacanciesComponent,
     EmployerComponent,
-    OfficeCardComponent
+    OfficeCardComponent,
+    ProfileUserComponent
   ],
   imports: [
     BrowserModule,
@@ -140,7 +155,12 @@ const routs = [
     DeleteVacancyDialog,
     DeleteContactPersonDialog,
     DeleteContactDialog,
-    DeleteSpecificationDialog
+    DeleteSpecificationDialog,
+    DeleteLanguageSkillDialog,
+    DeleteExperienceDialog,
+    DeleteSportSkillDialog,
+    DeleteContactApplicantDialog,
+    DeleteEducationDialog
   ],
   bootstrap: [AppComponent]
 })

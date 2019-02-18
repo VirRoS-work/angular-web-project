@@ -3,6 +3,8 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ContactType} from "../model/ContactType";
 import {FieldOfActivity} from "../model/FieldOfActivity";
+import {Language} from "../model/Language";
+import {Sport} from "../model/Sport";
 
 @Injectable({
   providedIn: 'root'
@@ -32,4 +34,15 @@ export class InfoService {
     return this.http.get<string[]>(this.host + "/employmenttypes");
   }
 
+  getLanguages(): Observable<Language[]> {
+    return this.http.get<Language[]>(this.host + "/languages");
+  }
+
+  getSports(): Observable<Sport[]> {
+    return this.http.get<Sport[]>(this.host + "/sports");
+  }
+
+  getFormsTraining(): Observable<string[]> {
+    return this.http.get<string[]>(this.host + "/formstraining");
+  }
 }
