@@ -1,6 +1,7 @@
  <mat-toolbar class="example-container" color="primary" role="toolbar">
     <mat-toolbar-row>
       <span> <a mat-button routerLink="">Главная</a></span>
+      <span *ngIf="authority === 'COMPANY'"> <a mat-button routerLink="/applicants">Соискатели</a></span>
       <span class="example-spacer"></span>
 
       <button *ngIf="authority === 'USER'" mat-button [matMenuTriggerFor]="userMenu">{{username}}</button>

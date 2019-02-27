@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {ContentService} from "../sevices/content.service";
+import {Vacancy} from "../model/Vacancy";
 
 export interface InfoCompany {
   id: string;
@@ -14,19 +16,19 @@ export interface InfoCompany {
 export class HomePageComponent implements OnInit {
 
   employers$: Object;
-  vacancies$: Object;
+  vacancies$: Vacancy[];
 
-  constructor() { }
+  constructor(private content: ContentService) { }
 
   ngOnInit() {
 
-    // this.data.getEmployers().subscribe(
-    //   data => this.employers$ = data
-    // );
-    //
-    // this.data.getVacancies().subscribe(
-    //   data => this.vacancies$ = data
-    // );
+    this.content.getEmployers().subscribe(
+      data => this.employers$ = data
+    );
+
+    this.content.getTop10ActiveVacancies().subscribe(
+      data => this.vacancies$ = data
+    );
 
   }
 

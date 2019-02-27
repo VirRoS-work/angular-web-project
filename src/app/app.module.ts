@@ -59,7 +59,7 @@ import {
   DeleteContactApplicantDialog,
   DeleteEducationDialog,
   DeleteExperienceDialog,
-  DeleteLanguageSkillDialog,
+  DeleteLanguageSkillDialog, DeleteSpecializationDialog,
   DeleteSportSkillDialog
 } from "./profile-user/profile-user.component";
 import { VacancyCardComponent } from './vacancy-card/vacancy-card.component';
@@ -69,16 +69,22 @@ import { EmployerComponent } from './employer/employer.component';
 import { OfficeCardComponent } from './office-card/office-card.component';
 import { httpInterceptorProviders } from "./auth/auth-interceptor";
 import { ProfileUserComponent } from './profile-user/profile-user.component';
+import { UsersComponent } from './users/users.component';
+import { UserCardComponent } from './user-card/user-card.component';
+import { UserComponent } from './user/user.component';
 
 const routs = [
   {path: '', component: HomePageComponent},
   {path: 'autorization', component: AutorizationComponent},
   {path: 'company_profile', component: ProfileComponent},
-  {path: 'user_profile', component:ProfileUserComponent}
-  // {path: 'vacancy/:id', component: VacancyComponent},
+  {path: 'user_profile', component:ProfileUserComponent},
+  {path: 'vacancy/:id', component: VacancyComponent},
   // {path: 'vacancies', component: VacanciesComponent},
-  // {path: 'employer/:id', component: EmployerComponent},
-  // {path: 'employer/:id/vacancy/:id', redirectTo: 'vacancy/:id', pathMatch: 'full' }
+  {path: 'employer/:id', component: EmployerComponent},
+  {path: 'employer/:id/vacancy/:id', redirectTo: 'vacancy/:id', pathMatch: 'full' },
+  {path: 'applicant/:id', component: UserComponent},
+  {path: 'applicants', component: UsersComponent},
+  {path: 'applicants/applicant/:id', redirectTo: 'applicant/:id', pathMatch: 'full' }
 ];
 
 @NgModule({
@@ -97,13 +103,17 @@ const routs = [
     DeleteExperienceDialog,
     DeleteSportSkillDialog,
     DeleteContactApplicantDialog,
+    DeleteSpecializationDialog,
     DeleteEducationDialog,
     VacancyCardComponent,
     VacancyComponent,
     VacanciesComponent,
     EmployerComponent,
     OfficeCardComponent,
-    ProfileUserComponent
+    ProfileUserComponent,
+    UsersComponent,
+    UserCardComponent,
+    UserComponent
   ],
   imports: [
     BrowserModule,
@@ -160,6 +170,7 @@ const routs = [
     DeleteExperienceDialog,
     DeleteSportSkillDialog,
     DeleteContactApplicantDialog,
+    DeleteSpecializationDialog,
     DeleteEducationDialog
   ],
   bootstrap: [AppComponent]

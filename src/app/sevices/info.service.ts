@@ -45,4 +45,8 @@ export class InfoService {
   getFormsTraining(): Observable<string[]> {
     return this.http.get<string[]>(this.host + "/formstraining");
   }
+
+  getFamilyStatus(): Observable<string[]> {
+    return this.http.get<string[]>(this.host + "/familystatuses");
+  }
 }

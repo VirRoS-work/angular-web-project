@@ -7,6 +7,8 @@ import {SportSkill} from "../model/SportSkill";
 import {Experience} from "../model/Experience";
 import {Education} from "../model/Education";
 import {ContactApplicant} from "../model/ContactApplicant";
+import {SpecializationApplicant} from "../model/SpecializationApplicant";
+import {ApplicantInfo} from "../model/ApplicantInfo";
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -22,6 +24,14 @@ export class UserService {
 
   getApplicantForAccount(): Observable<Applicant> {
     return this.http.get<Applicant>(this.host + "/info");
+  }
+
+  saveApplicantForAccount(applicant: Applicant): Observable<Applicant> {
+    return this.http.post<Applicant>(this.host + "/info", applicant, httpOptions);
+  }
+
+  switchStatusToAccount(): Observable<Applicant> {
+    return this.http.put<Applicant>(this.host + "/status",null);
   }
 
   // languages
@@ -45,11 +55,25 @@ export class UserService {
   }
 
   deleteSportSkillForAccount(id: number) {
-    return this.http.delete(this.host + "/sport/" + id, {responseType: 'text'})
+    return this.http.delete(this.host + "/sport/" + id, {responseType: 'text'});
   }
 
   getSportSkillsForAccount(): Observable<SportSkill[]> {
     return this.http.get<SportSkill[]>(this.host + "/sports");
+  }
+
+  //specializations
+
+  saveSpecializationForAccount(specialization: SpecializationApplicant): Observable<SpecializationApplicant> {
+    return this.http.post<SpecializationApplicant>(this.host + "/specialization", specialization, httpOptions);
+  }
+
+  deleteSpecializationForAccount(id: number) {
+    return this.http.delete(this.host + "/specialization/" + id, {responseType: 'text'});
+  }
+
+  getSpecializationForAccount(): Observable<SpecializationApplicant[]> {
+    return this.http.get<SpecializationApplicant[]>(this.host + "/specializations");
   }
 
   // experiences
@@ -92,6 +116,18 @@ export class UserService {
 
   getContactForAccount(): Observable<ContactApplicant[]> {
     return this.http.get<ContactApplicant[]>(this.host + "/contacts");
+  }
+
+  // information
+
+  saveInformationAboutAccount(applicantInfo: ApplicantInfo): Observable<ApplicantInfo> {
+    return this.http.post<ApplicantInfo>(this.host + "/information", applicantInfo, httpOptions);
+  }
+
+  // summary
+
+  downloadPDF(): Observable<Blob> {
+    return this.http.get(this.host + "/summary", {responseType: 'blob'});
   }
 
 }
