@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {TokenStorageService} from "../auth/token-storage.service";
+import {EmployerService} from "../sevices/employer.service";
 
 @Component({
   selector: 'app-bar-menu',
@@ -11,12 +12,23 @@ export class BarMenuComponent implements OnInit {
   username: string;
   authority: string;
 
-  constructor(private tokenStorage: TokenStorageService) { }
+  notification: number;
+
+  constructor(private tokenStorage: TokenStorageService, private empl: EmployerService) { }
 
   ngOnInit() {
     if(this.tokenStorage.getToken()) {
       this.username = this.tokenStorage.getUsername();
       this.authority = this.tokenStorage.getAuthority();
+    }
+
+    if(this.authority === "COMPANY") {
+      this.empl.chechNewNotificationForAccount().subscribe(
+        data => {
+          this.notification = Number(data);
+          if(this.notification == 0) this.notification = undefined;
+        }
+      );
     }
   }
 

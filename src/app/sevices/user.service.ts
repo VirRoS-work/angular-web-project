@@ -9,6 +9,7 @@ import {Education} from "../model/Education";
 import {ContactApplicant} from "../model/ContactApplicant";
 import {SpecializationApplicant} from "../model/SpecializationApplicant";
 import {ApplicantInfo} from "../model/ApplicantInfo";
+import {Vacancy} from "../model/Vacancy";
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -128,6 +129,34 @@ export class UserService {
 
   downloadPDF(): Observable<Blob> {
     return this.http.get(this.host + "/summary", {responseType: 'blob'});
+  }
+
+  // bookmarks
+
+  getBookmarks(): Observable<Vacancy[]> {
+    return this.http.get<Vacancy[]>(this.host + "/bookmarks");
+  }
+
+  deleteBookmarkForAccount(id: number) {
+    return this.http.delete(this.host + "/bookmark/" + id, {responseType: 'text'})
+  }
+
+  saveBookmark(id: number) {
+    return this.http.post(this.host + "/bookmark", id, httpOptions);
+  }
+
+  checkBookmark(id: number) {
+    return this.http.get(this.host + "/bookmark/check/" + id, {responseType: 'text'})
+  }
+
+  // Notifications
+
+  checkNotification(id: number) {
+    return this.http.get(this.host + "/notification/check/" + id, {responseType: 'text'})
+  }
+
+  saveNotification(id: number) {
+    return this.http.post(this.host + "/notification", id, httpOptions);
   }
 
 }

@@ -1,0 +1,13 @@
+<div mat-dialog-content class="info-dialog">
+  <h4>
+    Название: {{data.employer.name}} <br/>
+    Тип: {{data.employer.type}} <br/>
+    Масштаб: {{data.employer.number_of_person}} <br/>
+    <span *ngIf="data.employer.address"> Адрес: {{data.employer.address}}<br/></span>
+    <span *ngIf="data.employer.site"> Сайт: {{data.employer.site}}<br/></span>
+    <span *ngIf="data.employer.description"> Описание: {{data.employer.description}}<br/></span>
+  </h4>
+</div>
+<div mat-dialog-actions>
+  <button class="button-editor" mat-button (click)="onNoClick()">Закрыть</button>
+</div>

@@ -21,6 +21,10 @@ export class ContentService {
     return this.http.get<Vacancy[]>(this.host + "/last_vacancies");
   }
 
+  getVacancies(): Observable<Vacancy[]> {
+    return this.http.get<Vacancy[]>(this.host + "/vacancies");
+  }
+
   getVacancyById(id: number): Observable<Vacancy> {
     return this.http.get<Vacancy>(this.host + "/vacancy/" + id);
   }
@@ -39,5 +43,9 @@ export class ContentService {
 
   getUserById(id: number): Observable<Applicant> {
     return this.http.get<Applicant>(this.host + "/applicant/" + id);
+  }
+
+  downloadPDF(id: number): Observable<Blob> {
+    return this.http.get(this.host + "/summary/" + id, {responseType: 'blob'});
   }
 }

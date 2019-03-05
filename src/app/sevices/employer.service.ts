@@ -7,6 +7,7 @@ import {ContactPerson} from "../model/ContactPerson";
 import {Office} from "../model/Office";
 import {Vacancy} from "../model/Vacancy";
 import {SpecializationVacancy} from "../model/SpecializationVacancy";
+import {Notification} from "../model/Notification";
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -84,4 +85,17 @@ export class EmployerService {
     return this.http.put(this.host + "/vacancy/status", id, httpOptions);
   }
 
+  // Notifications
+
+  getNotificationsForAccount(): Observable<Notification[]> {
+    return this.http.get<Notification[]>(this.host + "/notifications");
+  }
+
+  chechNewNotificationForAccount() {
+    return this.http.get(this.host + "/notifications/new", {responseType: 'text'});
+  }
+
+  updateStatusForNewNotifications() {
+    return this.http.put(this.host + "/notifications/see", null, {responseType: 'text'});
+  }
 }

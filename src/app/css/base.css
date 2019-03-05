@@ -1,0 +1,112 @@
+.page {
+  display: table;
+  width: 100%;
+}
+
+/* Helper classes */
+
+.space {
+  flex: 1 1 auto;
+}
+
+.item-box:hover{
+  background: #c1c1c1;
+}
+
+.icon-prefix {
+  margin-right: 10px;
+}
+
+/* Profile style */
+
+.profile-page {
+  width: 100%;
+  margin: 0;
+  display: table;
+}
+
+.left-menu {
+  display: table-cell;
+  width: 30%;
+}
+
+.left-content {
+  display: table-cell;
+  width: 70%;
+}
+
+.right-content {
+  display: table-cell;
+  width: 70%;
+}
+
+
+/* Header */
+.content-header {
+  display: flex;
+  width: 100%;
+}
+
+.content-title {
+  margin: auto;
+}
+
+.hr-90 {
+  width: 90%;
+  margin-left: 5%;
+}
+
+
+/* Forms */
+
+mat-form-field {
+  width: 60%;
+  margin-left: 20%;
+}
+
+.flex-div {
+  margin-bottom: 10px;
+  width: 100%;
+  display: flex;
+}
+
+.success-message {
+  width: 60%;
+  margin: auto;
+  padding: 10px;
+  border-radius: 3px 3px 3px 3px;
+  color: #4F8A10;
+  background-color: #DFF2BF;
+}
+
+.error-message {
+  width: 60%;
+  margin: auto;
+  padding: 10px;
+  border-radius: 3px 3px 3px 3px;
+  color: #8a1b23;
+  background-color: #f2c8d4;
+}
+
+/* buttons */
+
+.button-editor {
+  margin: auto;
+}
+
+.button-cancel {
+  margin-left: 10px;
+}
+
+/* elements */
+
+.element-header {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: flex;
+  width: 100%;
+}
+
+.element-title {
+  margin: auto;
+}

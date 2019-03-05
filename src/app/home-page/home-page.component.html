@@ -3,7 +3,7 @@
   <div class="left-menu">
 
     <div class="vacancies-header">
-      <h2 class="vacancies-title">Активные компании</h2>
+      <h2 class="vacancies-title">Самые активные компании</h2>
     </div>
     <hr class="hr-90">
 
@@ -12,7 +12,7 @@
 
         <span>{{employer.name}}</span>
         <span class="spacer"> </span>
-        <span>{{employer.count}}</span>
+        <span>Вакансии: {{employer.count}}</span>
 
         <mat-divider></mat-divider>
 
@@ -33,7 +33,7 @@
                       salary_max="{{vacancy.salary_max}}" salary_min="{{vacancy.salary_min}}" id="{{vacancy.id}}"></app-vacancy-card>
 
     <div class="test1">
-      <button mat-flat-button class="button-editor" color="primary" routerLink="/vacancies">Показать больше вакансий</button>
+      <button mat-flat-button class="button-editor" color="primary" routerLink="/vacancies">Перейти на страницу вакансий</button>
     </div>
 
   </div> <!-- contents -->

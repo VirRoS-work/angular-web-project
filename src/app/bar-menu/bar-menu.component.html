@@ -1,7 +1,9 @@
  <mat-toolbar class="example-container" color="primary" role="toolbar">
     <mat-toolbar-row>
       <span> <a mat-button routerLink="">Главная</a></span>
-      <span *ngIf="authority === 'COMPANY'"> <a mat-button routerLink="/applicants">Соискатели</a></span>
+      <span> <a mat-button routerLink="/companies">Компании</a></span>
+      <span> <a mat-button routerLink="/vacancies">Вакансии</a></span>
+      <span *ngIf="authority === 'COMPANY' || authority === 'ADMIN'"> <a mat-button routerLink="/applicants">Соискатели</a></span>
       <span class="example-spacer"></span>
 
       <button *ngIf="authority === 'USER'" mat-button [matMenuTriggerFor]="userMenu">{{username}}</button>
@@ -9,6 +11,10 @@
         <button mat-menu-item routerLink="/user_profile">
           <mat-icon>person</mat-icon>
           <span>Профиль</span>
+        </button>
+        <button mat-menu-item routerLink="/bookmarks">
+          <mat-icon>star</mat-icon>
+          <span>Закладки</span>
         </button>
         <button mat-menu-item (click)="logOut()">
           <mat-icon>exit_to_app</mat-icon>
@@ -22,13 +28,29 @@
           <mat-icon>people</mat-icon>
           <span>Профиль</span>
         </button>
+        <button mat-menu-item routerLink="/notifications">
+          <mat-icon matBadge="{{notification}}" matBadgeColor="warn">notifications</mat-icon>
+          <span>Отклики</span>
+        </button>
         <button mat-menu-item (click)="logOut()">
           <mat-icon>exit_to_app</mat-icon>
           <span>Выход</span>
         </button>
       </mat-menu>
 
-      <button *ngIf="!authority" mat-flat-button color="accent" routerLink="/autorization">Авторизоваться</button>
+      <button *ngIf="authority === 'ADMIN'" mat-button [matMenuTriggerFor]="adminMenu">{{username}}</button>
+      <mat-menu #adminMenu = "matMenu">
+        <button mat-menu-item routerLink="/admin_profile">
+          <mat-icon>people</mat-icon>
+          <span>Админ панель</span>
+        </button>
+        <button mat-menu-item (click)="logOut()">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Выход</span>
+        </button>
+      </mat-menu>
+
+      <button *ngIf="!authority" mat-flat-button color="accent" routerLink="/authorization">Авторизоваться</button>
 
     </mat-toolbar-row>
   </mat-toolbar>
