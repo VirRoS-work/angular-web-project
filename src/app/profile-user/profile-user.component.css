@@ -1,0 +1,104 @@
+.profile-page {
+  width: 100%;
+  margin: 0;
+  display: table;
+}
+
+.left-profile-menu {
+  display: table-cell;
+  width: 30%;
+}
+
+.right-profile-content {
+  display: table-cell;
+  width: 70%;
+}
+
+.flex-div {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  width: 100%;
+  display: flex;
+}
+
+.button-editor {
+  margin: auto;
+}
+.button-cancel {
+  margin-left: 10px;
+}
+
+mat-form-field {
+  width: 60%;
+  margin-left: 20%;
+}
+
+.success-message {
+  width: 60%;
+  margin: 20px auto;
+  padding: 10px;
+  border-radius: 3px 3px 3px 3px;
+  color: #4F8A10;
+  background-color: #DFF2BF;
+}
+
+/* menu objects */
+.item-box:hover{
+  background: #c1c1c1;
+}
+.icon-prefix {
+  margin-right: 10px;
+}
+.space {
+  flex: 1 1 auto;
+}
+
+/* header */
+.profile-content-header {
+  display: flex;
+  width: 100%;
+}
+.profile-content-title {
+  margin: auto;
+}
+.hr-90 {
+  width: 90%;
+  margin-left: 5%;
+}
+
+/* body */
+
+.profile-content-body {
+  width: 90%;
+  margin-left: 5%;
+  margin-bottom: 20px;
+}
+
+.button-editors-item {
+  margin-left: 10px;
+}
+
+
+/* language page */
+
+.table-languages{
+  width: 100%;
+}
+
+/* sport page */
+
+.table-sports{
+  width: 100%;
+}
+
+/* contacts */
+
+.table-contacts{
+  width: 100%;
+}
+
+/* specializations */
+
+.table-specializations{
+  width: 100%;
+}

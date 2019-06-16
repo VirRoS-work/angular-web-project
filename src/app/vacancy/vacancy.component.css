@@ -1,0 +1,56 @@
+.page {
+  display: table;
+  width: 100%;
+}
+
+.left-menu {
+  display: table-cell;
+  width: 70%;
+}
+
+.right-content {
+  display: table-cell;
+  width: 30%;
+}
+
+.vacancy-header {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: flex;
+  width: 100%;
+}
+
+.vacancy-title {
+  margin: auto;
+}
+
+.hr-90 {
+  width: 90%;
+  margin-left: 5%;
+}
+
+.vacancy-content {
+  margin: 15px 5%;
+}
+
+.element-header {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: flex;
+  width: 100%;
+}
+
+.element-title {
+  margin: auto;
+}
+
+.flex-div {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  width: 100%;
+  display: flex;
+}
+
+.button-editor {
+  margin: auto;
+}

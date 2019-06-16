@@ -1,0 +1,70 @@
+<div class="page">
+
+  <div class="employer-header">
+    <div class="element-header">
+      <h2 class="element-title">{{employer$.name}}</h2>
+    </div>
+  </div>
+
+
+  <div class="employer-content">
+
+    <div class="left-content">
+
+      <div class="description">
+        {{employer$.description}} <br/>
+      </div>
+
+      <br/>
+      <b>Тип компании:</b> {{employer$.type}} <br/>
+      <b>Размер компании:</b> {{employer$.number_of_person}} <br/>
+      <b>Адрес:</b> {{employer$.address}} <br/>
+      <b>Сайт:</b> <a href="{{employer$.site}}">{{employer$.site}}</a> <br/>
+      <br/>
+
+      <div class="vacancies">
+        <div class="element-header">
+          <h2 class="element-title">Активные вакансии</h2>
+        </div>
+        <hr class="hr-90">
+
+        <app-vacancy-card *ngFor="let vacancy of vacancies$" [vacancy]="vacancy"></app-vacancy-card>
+      </div>
+
+
+    </div>
+
+
+    <div class="right-content">
+
+      <div class="offices">
+        <div class="element-header">
+          <h2 class="element-title">Офисы</h2>
+        </div>
+        <hr class="hr-90">
+        <app-office-card *ngFor="let office of employer$.offices" city="{{office.city}}" address="{{office.address}}"
+                         description="{{office.description}}"></app-office-card>
+      </div>
+
+      <div class="contact-data">
+        <div class="element-header">
+          <h2 class="element-title">Контактные данные</h2>
+        </div>
+        <hr class="hr-90">
+        <mat-card *ngFor="let contact of employer$.contacts">
+          <mat-card-header>
+            <mat-card-title>{{contact.last_name}} {{contact.first_name}} {{contact.father_name}}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div *ngFor="let con of contact.contacts">
+              {{con.contact_type.name}}: {{con.value}}
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,18 @@
+.event-header {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: flex;
+  width: 100%;
+}
+
+.event-content {
+  margin: 15px 5%;
+}
+
+.event-title {
+  margin: auto;
+}
+
+.description {
+  white-space: pre;
+}

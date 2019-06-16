@@ -1,0 +1,63 @@
+<div class="page">
+
+  <div class="left-menu">
+
+    <div class="element-header">
+      <h2 class="element-title">Фильтры</h2>
+    </div>
+
+    <hr class="hr-90">
+
+    <mat-form-field appearance="outline" class="filter">
+      <mat-label>Ключевое слово</mat-label>
+      <input matInput #vacancy_name placeholder="Ключевое слово" [(ngModel)]="filter.key">
+    </mat-form-field> <!-- book author -->
+
+    <div class="filter filter-text">
+      <span>Расширенный поиск по ключу</span>
+      <span class="space"></span>
+      <mat-slide-toggle color='primary' [checked]="filter.isGlobal" [(ngModel)]="filter.isGlobal"></mat-slide-toggle>
+    </div>
+
+    <mat-form-field appearance="outline" class="filter">
+      <mat-label>Минимальная зарплата</mat-label>
+      <input matInput type="number" #min_salary >
+    </mat-form-field>
+
+    <div class="filter filter-text">
+      <span>Удаленная работа</span>
+      <span class="space"></span>
+      <mat-slide-toggle color='primary'></mat-slide-toggle>
+    </div>
+
+
+    <div class="flex-div">
+      <button mat-flat-button class="button-editor" color="primary"
+              (click)="getFindVacancies()">
+        Поиск
+      </button>
+    </div> <!-- sport add button -->
+
+    <hr class="hr-90">
+
+  </div> <!-- filters -->
+
+  <div class="vacancies-content">
+
+    <div class="element-header">
+      <h2 class="element-title">Вакансии</h2>
+    </div>
+    <hr class="hr-90">
+
+    <app-vacancy-card *ngFor="let vacancy of vacancies$" [vacancy]="vacancy"></app-vacancy-card>
+
+    <mat-paginator [length]="length"
+                   [pageSize]="filter.info.pageSize"
+                   [pageIndex]="filter.info.pageIndex"
+                   [pageSizeOptions]="pageSizeOptions"
+                   (page)="getListVacancies($event)">
+    </mat-paginator>
+
+  </div>
+
+</div>

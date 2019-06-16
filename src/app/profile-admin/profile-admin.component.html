@@ -1,0 +1,119 @@
+<div class="profile-page" xmlns="http://www.w3.org/1999/html">
+
+  <div class="left-menu">
+
+    <mat-toolbar>
+      <mat-toolbar-row class="item-box" (click)=click_menu(1) style="cursor: hand;cursor: pointer;">
+        <mat-icon class="icon-prefix">mail</mat-icon>
+        <span>Заявки компаний</span>
+        <span class="space"></span>
+        <mat-icon>arrow_forward_ios</mat-icon>
+      </mat-toolbar-row> <!-- user profile -->
+      <mat-toolbar-row class="item-box" (click)=click_menu(2) style="cursor: hand;cursor: pointer;">
+        <mat-icon class="icon-prefix">security</mat-icon>
+        <span>Сброс паролей</span>
+        <span class="space"></span>
+        <mat-icon>arrow_forward_ios</mat-icon>
+      </mat-toolbar-row> <!-- user information -->
+    </mat-toolbar>
+  </div> <!-- Admin panel menu -->
+
+  <div class="right-content">
+
+    <div class="company-applicants-page" *ngIf="pageCompanyApplications">
+
+      <div class="content-header">
+        <h2 class="content-title">Заявки компаний</h2>
+      </div>
+      <hr class="hr-90">
+
+      <table mat-table class="table-blocked-companies"
+             *ngIf="blockedCompanies$ && blockedCompanies$.length > 0; else not_blocked_company"
+             [dataSource]="blockedCompanies$">
+
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef><h3>Компания</h3></mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.name}} (
+            <span style="color:darkblue; cursor: hand;cursor: pointer;" (click)="openInfoDialog(element)">
+            Подробнее
+          </span>)</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="options">
+          <mat-header-cell *matHeaderCellDef><h3>Опции</h3></mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <button mat-flat-button color="primary" (click)="unlockCompany(element.id)">
+              Одобрить
+            </button>
+            <button mat-stroked-button color="error" class="button-cancel" (click)="blockCompany(element.id)">
+              Отклонить
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumnsForBlockedCompanies"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumnsForBlockedCompanies;"></mat-row>
+      </table> <!-- language table -->
+      <ng-template #not_blocked_company >
+        <div class="element-header">
+          <h3 class="element-title">Нет новых заявок!</h3>
+        </div>
+      </ng-template>
+
+    </div> <!-- Company applicants page -->
+    <div class="password-reset-page" *ngIf="pagePasswordReset">
+
+      <div class="content-header">
+        <h2 class="content-title">Сброс паролей пользователей</h2>
+      </div>
+      <hr class="hr-90">
+
+      <form>
+
+        <br/>
+        <mat-form-field appearance="outline">
+          <mat-label>Логин</mat-label>
+          <input matInput #login placeholder="Введите логин пользователя" [formControl]="passwordResetLoginControl"
+                 type="text" [matAutocomplete]="auto" required>
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngFor="let username of filteredUsernames | async" [value]="username">
+              {{username}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="passwordResetLoginControl.hasError('required')">
+            Поле обязательно для заполнения
+          </mat-error>
+        </mat-form-field> <!-- Input username -->
+        <mat-form-field appearance="outline">
+          <mat-label>Пароль</mat-label>
+          <input matInput #password placeholder="Введите новый пароль"
+                 [type]="hidePassword ? 'password' : 'text'"
+                 [formControl]="passwordResetControl" required minlength="6" maxlength="20">
+          <mat-icon matSuffix (click)="hidePassword = !hidePassword" style="cursor: hand;cursor: pointer;">
+            {{hidePassword ? 'visibility' : 'visibility_off'}}
+          </mat-icon>
+          <mat-error *ngIf="passwordResetControl.hasError('required')">Пароль обязателен для заполнения</mat-error>
+          <mat-error *ngIf="passwordResetControl.hasError('minlength')">Количество символов должно быть не менее 6
+          </mat-error>
+        </mat-form-field> <!-- Input password -->
+
+        <div class="flex-div">
+          <div class="success-message" *ngIf="passwordChangeSuccessfully">
+            Пароль успешно изменен!
+          </div> <!-- info success message -->
+          <div class="error-message" *ngIf="passwordChangeError">
+            Пользователь с таким логином не найден!
+          </div> <!-- info error message -->
+        </div> <!-- info success block -->
+
+        <div class="flex-div">
+          <button mat-flat-button class="button-editor" color="primary"
+                  (click)="editPasswordForUser(login.value, password.value)">
+            Сбросить пароль
+          </button>
+        </div> <!-- edit user information -->
+      </form>
+
+    </div> <!-- Password reset page -->
+  </div>
+</div>

@@ -1,0 +1,15 @@
+/* Pages */
+
+.company-applicants-page{
+
+}
+
+.table-blocked-companies{
+  width: 90%;
+  margin-left: 5%;
+}
+
+.info-dialog {
+  display: flex;
+  width: 100%;
+}

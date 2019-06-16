@@ -1,0 +1,41 @@
+.page {
+  display: table;
+  width: 100%;
+}
+
+.employer-header {
+  display: table-row;
+  width: 100%;
+}
+
+.employer-content {
+  display: table;
+  width: 100%;
+}
+
+.element-header {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: flex;
+  width: 100%;
+}
+
+.element-title {
+  margin: auto;
+}
+
+.hr-90 {
+  width: 90%;
+  margin-left: 5%;
+}
+
+.left-content {
+  display: table-cell;
+  width: 70%;
+  padding: 10px;
+}
+
+.right-content {
+  display: table-cell;
+  width: 30%;
+}

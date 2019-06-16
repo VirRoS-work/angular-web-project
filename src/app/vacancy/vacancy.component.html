@@ -1,0 +1,127 @@
+<div class="page">
+  <div class="left-content">
+
+    <div class="vacancy-header">
+      <h2 class="vacancy-title">{{vacancy$.title}}</h2>
+    </div>
+    <hr class="hr-90">
+
+    <div class="vacancy-content">
+      <span *ngIf="vacancy$.salary_min"><b>Минимальная зарплата:</b> от {{vacancy$.salary_min}} руб.<br></span>
+      <span *ngIf="vacancy$.salary_max"><b>Максимальная зарплата:</b> до {{vacancy$.salary_max}} руб.<br></span>
+      <span *ngIf="vacancy$.experience_min"><b>Опыт работы:</b> от {{vacancy$.experience_min}} лет <br></span>
+      <span *ngIf="vacancy$.type_employment"><b>Тип занятости:</b> {{vacancy$.type_employment}} рабочий день<br/></span>
+      <span *ngIf="vacancy$.remove_work">
+        <b>Удаленной работа:</b>
+      <span *ngIf="vacancy$.remove_work; else remove_work">
+        Да
+      </span>
+        <ng-template #remove_work>
+          <span>Нет</span>
+        </ng-template><br>
+      </span>
+      <span class="description">
+        <br/>
+        <b>Описание:</b><br/><br/>{{vacancy$.description}}</span>
+
+      <div class="container" *ngIf="vacancy$.office">
+        <div class="vacancy-header">
+          <h3 class="vacancy-title">
+            <br/>Офис
+          </h3>
+        </div>
+        Город: {{vacancy$.office.city}} <br/>
+        Адрес: {{vacancy$.office.address}}
+      </div>
+    </div>
+
+    <hr class="hr-90" *ngIf="vacancy$.publication_date">
+    <div class="vacancy-content" *ngIf="vacancy$.publication_date">
+      <span>Дата публикации: {{getNormalDateTime(vacancy$.publication_date)}} <br/></span>
+    </div>
+
+  </div>
+
+  <div class="right-content">
+
+    <div class="user-options" *ngIf="authority === 'USER'">
+      <div class="element-header">
+        <h2 class="element-title">Опции</h2>
+      </div>
+      <hr class="hr-90">
+
+      <div class="flex-div">
+        <button mat-flat-button class="button-editor" color="primary" *ngIf="!bookmarkFlag"
+                (click)="saveBookmark(vacancy$.id)">
+          Добавить вакансию в закладки
+        </button>
+        <button mat-stroked-button class="button-editor" *ngIf="bookmarkFlag"
+                (click)="deleteBookmark(vacancy$.id)">
+          Удалить вакансию из закладок
+        </button>
+      </div>
+
+      <div class="flex-div">
+        <button mat-flat-button class="button-editor" color="primary" *ngIf="!notificationFlag"
+                (click)="saveNotification(vacancy$.id)">
+          Откликнуться на вакансию
+        </button>
+        <div class="button-editor" *ngIf="notificationFlag">
+          Вы уже откликнулись на данную вакансию
+        </div>
+      </div>
+
+      <br/>
+    </div>
+
+    <div class="vacancy-header">
+      <h2 class="vacancy-title">Доп. информация</h2>
+    </div>
+    <hr class="hr-90">
+
+    <div class="container">
+      <div class="vacancy-header">
+        <h3 class="vacancy-title">Компания</h3>
+      </div>
+      Название: {{employer$.name}} <br/>
+      <div *ngIf="employer$.description">
+        Описание:
+        <span *ngIf="employer$.description.length >= 200">
+      {{employer$.description.substr(0, 200) + "..."}}
+    </span>
+      </div>
+      <span *ngIf="employer$.site"><br/>
+                Сайт: <a href="employer$.site">{{employer$.site}}</a>
+              </span>
+    </div>
+
+
+    <div class="container">
+      <div class="vacancy-header">
+        <h3 class="vacancy-title">
+          <button mat-stroked-button color="" routerLink="employer/{{employer$.id}}">Перейти к компании</button>
+        </h3>
+      </div>
+
+
+      <div class="vacancy-header">
+        <h3 class="vacancy-title">
+          <button mat-raised-button color="primary" class="button-editor" (click)="show = !show">
+            {{show ? 'Скрыть контактные данные' : 'Показать контактные данные'}}
+          </button>
+        </h3>
+      </div>
+    </div>
+
+    <div *ngIf="show">
+      <div *ngFor="let contact of employer$.contacts">
+        {{contact.last_name + " " + contact.first_name + " " + (contact.father_name != null ? contact.father_name :
+        "")}} <br/>
+        <div *ngFor="let con of contact.contacts">
+          {{con.contact_type.name + ": " + con.value}}
+        </div>
+        <br/>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<div class="page">
+
+  <div class="left-menu">
+
+    <div class="element-header">
+      <h2 class="element-title">Фильтры</h2>
+    </div>
+
+    <hr class="hr-90">
+
+    <mat-form-field appearance="outline" class="filter">
+      <mat-label>Название</mat-label>
+      <input matInput #company_name placeholder="Название компании">
+    </mat-form-field> <!-- book author -->
+
+    <div class="filter filter-text">
+      <span>Показывать компании без вакансий</span>
+      <span class="space"></span>
+      <mat-slide-toggle color='primary' [checked]="isEmptyCompany" [(ngModel)]="isEmptyCompany"></mat-slide-toggle>
+    </div>
+
+    <hr class="hr-90">
+
+    <div class="flex-div">
+      <button mat-flat-button class="button-editor" color="primary"
+              (click)="getFindCompanies(company_name.value)">
+        Поиск
+      </button>
+    </div> <!-- sport add button -->
+  </div> <!-- filters -->
+
+  <div class="right-content">
+
+    <div class="element-header">
+      <h2 class="element-title">Компании</h2>
+    </div>
+    <hr class="hr-90">
+
+    <app-company-card *ngFor="let company of companies$" [employer]="company"></app-company-card>
+
+    <mat-paginator [length]="length"
+                   [pageSize]="pageSize"
+                   [pageSizeOptions]="pageSizeOptions"
+                   (page)="getListCompanies($event)"
+    >
+    </mat-paginator>
+
+  </div> <!-- content -->
+
+</div>

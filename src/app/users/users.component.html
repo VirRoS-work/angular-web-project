@@ -1,0 +1,21 @@
+<div class="page">
+
+  <div class="users-filters">
+
+    <div class="element-header">
+      <h2 class="element-title">Фильтры</h2>
+    </div>
+    <hr class="hr-90">
+  </div> <!-- filters -->
+
+  <div class="users-content">
+
+    <div class="element-header">
+      <h2 class="element-title">Соискатели</h2>
+    </div>
+    <hr class="hr-90">
+
+    <app-user-card *ngFor="let user of users$" [user]="user"></app-user-card>
+  </div> <!-- content -->
+
+</div>

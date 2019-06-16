@@ -1,0 +1,34 @@
+.page {
+  display: table;
+  width: 100%;
+}
+
+.hr-90 {
+  width: 90%;
+  margin-left: 5%;
+}
+
+.element-header {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: flex;
+  width: 100%;
+}
+
+.element-title {
+  margin: auto;
+}
+
+/* filters */
+
+.vacancies-filters {
+  display: table-cell;
+  width: 30%;
+}
+
+/* content */
+
+.vacancies-content {
+  display: table-cell;
+  width: 70%;
+}

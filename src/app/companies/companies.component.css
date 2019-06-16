@@ -1,0 +1,14 @@
+.filter {
+  width: 90%;
+  margin-left: 5%;
+}
+
+.filter-text {
+  vertical-align: center;
+  margin-bottom: 15px;
+  display: flex;
+}
+
+.space {
+  flex: 1 1 auto;
+}

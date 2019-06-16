@@ -1,0 +1,49 @@
+<div class="page">
+
+  <div class="full-content">
+    <div class="element-header">
+      <h2 class="element-title">Отклики на ваши вакансии</h2>
+    </div>
+    <hr class="hr-90">
+
+    <table mat-table class="table-notifications" *ngIf="notifications && notifications.length > 0; else notifications_error"
+           [dataSource]="notifications">
+
+      <ng-container matColumnDef="applicant">
+        <mat-header-cell *matHeaderCellDef><h3>Соискатель</h3></mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <a routerLink="/applicant/{{element.applicant.id}}">
+            {{element.applicant.last_name}} {{element.applicant.first_name}}
+          </a>
+
+          <button mat-button class="button-editor"
+                  (click)="dowloadPDF(element.applicant.id, element.applicant.last_name)">
+            Скачать PDF
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="vacancy">
+        <mat-header-cell *matHeaderCellDef><h3>Вакансия</h3></mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <a routerLink="/vacancy/{{element.vacancy.id}}">{{element.vacancy.title}}</a>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="date">
+        <mat-header-cell *matHeaderCellDef><h3>Дата</h3></mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{getNormalDateTime(element.date)}}
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumnsForNotifications"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumnsForNotifications;"></mat-row>
+    </table> <!-- notifications table -->
+    <ng-template #notifications_error >
+      <div class="element-header">
+        <h3 class="element-title">У Вас нет откликов!</h3>
+      </div>
+    </ng-template>
+  </div>
+</div>

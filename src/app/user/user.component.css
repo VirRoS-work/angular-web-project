@@ -1,0 +1,59 @@
+.page {
+  display: table;
+  width: 100%;
+}
+
+.left-content {
+  display: table-cell;
+  width: 70%;
+  padding: 10px;
+}
+
+.right-content {
+  display: table-cell;
+  width: 30%;
+}
+
+.full-content {
+  display: table-cell;
+  width: 100%;
+}
+
+.element-header {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: flex;
+  width: 100%;
+}
+
+.element-title {
+  margin: auto;
+}
+
+.hr-90 {
+  width: 90%;
+  margin-left: 5%;
+}
+
+.table-languages{
+  width: 100%;
+}
+
+.table-sports{
+  width: 100%;
+}
+
+.table-specializations{
+  width: 100%;
+}
+
+.flex-div {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  width: 100%;
+  display: flex;
+}
+
+.button-editor {
+  margin: auto;
+}

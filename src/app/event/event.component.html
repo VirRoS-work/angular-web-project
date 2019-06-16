@@ -1,0 +1,66 @@
+<div class="page">
+
+  <div class="left-content">
+
+    <div class="event-header">
+      <h2 class="event-title">{{event$.title}}</h2>
+    </div>
+    <hr class="hr-90">
+
+    <div class="event-content">
+
+      <span><b>Тип мероприятия:</b> {{event$.type}}</span> <br/>
+      <span><b>Время проведения:</b> {{getNormalDateTime(event$.time)}}</span> <br/>
+      <span><b>Место проведения:</b> {{event$.address}}</span> <br/>
+      <br>
+      <span class="description">{{event$.description}}</span>
+
+    </div>
+
+  </div>
+
+  <div class="right-menu">
+
+    <div class="container">
+      <div class="vacancy-header">
+        <h3 class="vacancy-title">Компания</h3>
+      </div>
+      <b>Название:</b> {{employer$.name}} <br/>
+      <div *ngIf="employer$.description">
+        <span *ngIf="employer$.description.length >= 200">{{employer$.description.substr(0, 200) + "..."}}</span>
+      </div>
+      <span *ngIf="employer$.site"><br/>
+                Сайт: <a href="employer$.site">{{employer$.site}}</a>
+              </span>
+    </div>
+
+
+    <div class="container">
+      <div class="vacancy-header">
+        <h3 class="vacancy-title">
+          <button mat-stroked-button color="" routerLink="employer/{{employer$.id}}">Перейти к компании</button>
+        </h3>
+      </div>
+
+      <div class="vacancy-header">
+        <h3 class="vacancy-title">
+          <button mat-raised-button color="primary" class="button-editor" (click)="show = !show">
+            {{show ? 'Скрыть контактные данные' : 'Показать контактные данные'}}
+          </button>
+        </h3>
+      </div>
+    </div>
+
+    <div *ngIf="show">
+      <div *ngFor="let contact of employer$.contacts">
+        {{contact.last_name + " " + contact.first_name + " " + (contact.father_name != null ? contact.father_name :
+        "")}} <br/>
+        <div *ngFor="let con of contact.contacts">
+          {{con.contact_type.name + ": " + con.value}}
+        </div>
+        <br/>
+      </div>
+    </div>
+  </div>
+
+</div>

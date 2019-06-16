@@ -1,0 +1,24 @@
+<mat-card class="vac-card">
+  <mat-card-header>
+    <div mat-card-avatar class="header-avatar"></div>
+    <mat-card-title>{{vacancy.vacancy.title}}</mat-card-title>
+    <mat-card-subtitle>
+      <span *ngIf="vacancy.vacancy.salary_min"> от {{vacancy.vacancy.salary_min}}</span>
+      <span *ngIf="vacancy.vacancy.salary_max"> до {{vacancy.vacancy.salary_max}}</span>
+      <span *ngIf="vacancy.vacancy.salary_max || vacancy.vacancy.salary_min"> руб.<br/></span>
+      <span *ngIf="vacancy.employer_name">{{vacancy.employer_name}}</span>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <br/>
+    <span *ngIf="vacancy.vacancy.description.length >= 200">
+      {{vacancy.vacancy.description.substr(0, 200) + "..."}}
+    </span>
+    <span *ngIf="vacancy.vacancy.description.length < 200">
+      {{vacancy.vacancy.description}}
+    </span>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button routerLink="vacancy/{{vacancy.vacancy.id}}">Показать подробнее</button>
+  </mat-card-actions>
+</mat-card>

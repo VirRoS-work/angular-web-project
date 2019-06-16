@@ -1,0 +1,46 @@
+<div class="page">
+
+  <div class="full-content">
+    <div class="element-header">
+      <h2 class="element-title">Ваши закладки</h2>
+    </div>
+    <hr class="hr-90">
+
+    <table mat-table class="table-bookmarks" *ngIf="vacancies && vacancies.length > 0; else bookmark_error" [dataSource]="vacancies">
+
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef><h3>Название</h3></mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{element.title}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="see">
+        <mat-header-cell *matHeaderCellDef><h3>Просмотр</h3></mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <button mat-flat-button color="primary" routerLink="/vacancy/{{element.id}}">
+            Просмотр
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="delete">
+        <mat-header-cell *matHeaderCellDef><h3>Удаление</h3></mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <button mat-flat-button color="warn" (click)="deleteBookmark(element.id)">
+            Удалить
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumnsForBookmarks"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumnsForBookmarks;"></mat-row>
+    </table> <!-- language table -->
+    <ng-template #bookmark_error >
+      <div class="element-header">
+        <h3 class="element-title">У Вас нет закладок</h3>
+      </div>
+    </ng-template>
+
+  </div>
+</div>

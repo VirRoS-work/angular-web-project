@@ -1,0 +1,9 @@
+.user-card {
+  width: 93%;
+  margin: 5px auto;
+}
+
+.header-avatar {
+  background-image: url('https://magazin-pixel.ru/themes/pxl/images/avatar-placeholder.png');
+  background-size: cover;
+}

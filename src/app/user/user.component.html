@@ -1,0 +1,202 @@
+<div class="page">
+
+  <div class="left-content" *ngIf="!userNotFoundError">
+
+    <div class="user-information">
+      <div class="element-header">
+        <h2 class="element-title">Профиль</h2>
+      </div>
+      <hr class="hr-90">
+
+      <p>
+        Имя: {{user$.last_name}} {{user$.first_name}} {{user$.father_name}} <br/>
+        Пол: <span *ngIf="user$.sex === true; else sex">Мужской</span>
+        <ng-template #sex>Женский</ng-template>
+        <br/>
+        Дата рождения: {{user$.date_of_birth}}
+      </p>
+      <p *ngIf="user$.info">
+        <span *ngIf="user$.info.ready_for_remove_work">Удаленной работа:
+          <span *ngIf="user$.info.ready_for_remove_work; else remove_work">Готов</span>
+          <ng-template #remove_work>Не готов</ng-template><br/>
+        </span> <!-- remove work -->
+        <span *ngIf="user$.info.ready_to_move">Готов к переезду:
+          <span *ngIf="user$.info.ready_to_move; else ready_to_move">Готов</span>
+          <ng-template #ready_to_move>Не готов</ng-template><br/>
+        </span><!-- move -->
+        <span *ngIf="user$.info.city">Город проживания: {{user$.info.city}}<br/></span> <!-- city -->
+        <span *ngIf="user$.info.citizenship">Гражданство: {{user$.info.citizenship}}<br/></span> <!-- citizenship -->
+        <span *ngIf="user$.info.family_status">Семейное положение: {{user$.info.family_status}}<br/></span>
+        <!-- family_status -->
+        <span *ngIf="user$.info.children">Наличие детей:
+          <span *ngIf="user$.info.children; else children">Есть</span>
+          <ng-template #children>Нет</ng-template><br/>
+        </span> <!-- children -->
+        <span *ngIf="user$.info.academic_degree">Академический статус: {{user$.info.academic_degree}}<br/></span>
+        <!-- academic_degree -->
+        <span *ngIf="user$.info.salary">Желаемая зарплата: {{user$.info.salary}}<br/></span> <!-- salary -->
+        <span *ngIf="user$.info.about_me">Обо мне: {{user$.info.about_me}}<br/></span> <!-- about_me -->
+        <span *ngIf="user$.info.hobby">Хобби: {{user$.info.hobby}}<br/></span> <!-- hobby -->
+      </p>
+      <br/>
+    </div>
+
+    <div class="user-information-specializations" *ngIf="user$.specializations && user$.specializations.length > 0">
+      <div class="element-header">
+        <h2 class="element-title">Профессиональные навыки</h2>
+      </div>
+      <hr class="hr-90">
+
+      <table mat-table class="table-specializations" [dataSource]="user$.specializations">
+
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef><h3>Навык</h3></mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.field_of_activity.name}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="skill">
+          <mat-header-cell *matHeaderCellDef><h3>Уровень</h3></mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.specialization}}</mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumnsForLanguages"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumnsForLanguages;"></mat-row>
+      </table> <!-- language table -->
+      <br/>
+    </div>
+
+    <div class="user-information-experiences" *ngIf="user$.experiences && user$.experiences.length > 0">
+      <div class="element-header">
+        <h2 class="element-title">Опыт работы</h2>
+      </div>
+      <hr class="hr-90">
+
+      <p *ngFor="let experience of user$.experiences">
+
+        Компания: {{experience.company_name}}<br/>
+        Должность: {{experience.position}}<br/>
+        <span *ngIf="experience.date_start">Начало работы: {{experience.date_start}}<br/></span> <!-- date_start -->
+        <span *ngIf="experience.date_end">Окончание работы: {{experience.date_end}}<br/></span> <!-- date_end -->
+        <span *ngIf="experience.duties">Обязанности: {{experience.duties}}<br/></span> <!-- duties -->
+        <span *ngIf="experience.achievements">Достижения: {{experience.achievements}}<br/></span> <!-- achievements -->
+
+      </p>
+      <br/>
+    </div>
+
+    <div class="user-information-educations" *ngIf="user$.educations && user$.educations.length > 0">
+      <div class="element-header">
+        <h2 class="element-title">Образование</h2>
+      </div>
+      <hr class="hr-90">
+
+      <p *ngFor="let educ of user$.educations">
+
+        Образовательное учреждение: {{educ.educational_institution}}<br/>
+        Факультет: {{educ.faculty}}<br/>
+        Специализация: {{educ.specialization}}<br/>
+        <span *ngIf="educ.date_start">Начало учебы: {{educ.date_start}}<br/></span> <!-- date_start -->
+        <span *ngIf="educ.date_end">Окончание учебы: {{educ.date_end}}<br/></span> <!-- date_end -->
+        <span *ngIf="educ.level_education">Уровень образования: {{educ.level_education}}<br/></span> <!-- level_education -->
+        <span *ngIf="educ.form_training">Форма обучения: {{educ.form_training}}<br/></span> <!-- form_training -->
+      </p>
+
+      <br/>
+    </div>
+
+    <div class="user-information-languages" *ngIf="user$.language_skills && user$.language_skills.length > 0">
+      <div class="element-header">
+        <h2 class="element-title">Языковые навыки</h2>
+      </div>
+      <hr class="hr-90">
+
+      <table mat-table class="table-languages" [dataSource]="user$.language_skills">
+
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef><h3>Язык</h3></mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.language.name}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="skill">
+          <mat-header-cell *matHeaderCellDef><h3>Уровень</h3></mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.ownership_level}}</mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumnsForLanguages"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumnsForLanguages;"></mat-row>
+      </table> <!-- language table -->
+      <br/>
+    </div>
+
+    <div class="user-information-sports" *ngIf="user$.sport_skills && user$.sport_skills.length > 0">
+      <div class="element-header">
+        <h2 class="element-title">Спортивные навыки</h2>
+      </div>
+      <hr class="hr-90">
+
+      <table mat-table class="table-sports" [dataSource]="user$.sport_skills">
+
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef><h3>Спорт</h3></mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.sport.name}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="skill">
+          <mat-header-cell *matHeaderCellDef><h3>Уровень</h3></mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.ownership_level}}</mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumnsForLanguages"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumnsForLanguages;"></mat-row>
+      </table> <!-- language table -->
+      <br/>
+    </div>
+
+  </div>
+
+  <div class="right-content" *ngIf="!userNotFoundError">
+
+    <div class="user-options">
+      <div class="element-header">
+        <h2 class="element-title">Опции</h2>
+      </div>
+      <hr class="hr-90">
+
+      <div class="flex-div">
+        <button mat-flat-button class="button-editor" color="primary" (click)="dowloadPDF(user$.id)">
+          Скачать резюме в виде PDF файла
+        </button>
+      </div>
+
+      <br/>
+    </div>
+
+    <div class="user-information-sports" *ngIf="user$.contacts && user$.contacts.length > 0">
+      <div class="element-header">
+        <h2 class="element-title">Контакты</h2>
+      </div>
+      <hr class="hr-90">
+
+      <table mat-table class="table-sports" [dataSource]="user$.contacts">
+
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef><h3>Тип</h3></mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.contact_type.name}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="skill">
+          <mat-header-cell *matHeaderCellDef><h3>Контакт</h3></mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.value}}</mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumnsForLanguages"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumnsForLanguages;"></mat-row>
+      </table> <!-- language table -->
+
+    </div>
+  </div>
+
+  <div class="full-content" *ngIf="userNotFoundError">
+    Данного пользователя не существует или его профиль скрыт!
+  </div>
+</div>
