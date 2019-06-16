@@ -1,0 +1,14 @@
+<div mat-dialog-content class="profile-content">
+  <div class="profile-content-header">
+    <h2 class="profile-content-title">Статистика</h2>
+  </div>
+  <div class="profile-content-body">
+    Просмотры: {{data.statistic.views}} <br/>
+    В закладках: {{data.statistic.bookmarks}} <br/>
+    Отклики (всего): {{data.statistic.notifications}} <br/>
+    Отклики (сегодня): {{data.statistic.notificationsToday}} <br/>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button class="button-editor" mat-button (click)="onNoClick()" cdkFocusInitial>Ok</button>
+</div>

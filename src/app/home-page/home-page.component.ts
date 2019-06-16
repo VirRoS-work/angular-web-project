@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {ContentService} from "../sevices/content.service";
 import {Vacancy} from "../model/Vacancy";
+import {EventMessage} from "../model/EventMessage";
+import {VacancyMessage} from "../model/filters/responce/VacancyMessage";
 
 export interface InfoCompany {
   id: string;
@@ -16,7 +18,8 @@ export interface InfoCompany {
 export class HomePageComponent implements OnInit {
 
   employers$: Object;
-  vacancies$: Vacancy[];
+  vacancies$: VacancyMessage[];
+  events$: EventMessage[];
 
   constructor(private content: ContentService) { }
 
@@ -27,7 +30,13 @@ export class HomePageComponent implements OnInit {
     );
 
     this.content.getTop10ActiveVacancies().subscribe(
-      data => this.vacancies$ = data
+      data => {
+        this.vacancies$ = data;
+      }
+    );
+
+    this.content.getNearestEvents().subscribe(
+      data => this.events$ = data
     );
 
   }

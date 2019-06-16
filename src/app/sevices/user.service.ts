@@ -10,6 +10,7 @@ import {ContactApplicant} from "../model/ContactApplicant";
 import {SpecializationApplicant} from "../model/SpecializationApplicant";
 import {ApplicantInfo} from "../model/ApplicantInfo";
 import {Vacancy} from "../model/Vacancy";
+import {Book} from "../model/Book";
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -103,6 +104,20 @@ export class UserService {
 
   getEducationsForAccount(): Observable<Education[]> {
     return this.http.get<Education[]>(this.host + "/educations");
+  }
+
+  // books
+
+  saveBookForAccount(book: Book): Observable<Book> {
+    return this.http.post<Book>(this.host + "/book", book, httpOptions);
+  }
+
+  deleteBookForAccount(id: number) {
+    return this.http.delete(this.host + "/book/" + id, {responseType: "text"});
+  }
+
+  getBooksForAccount(): Observable<Book[]> {
+    return this.http.get<Book[]>(this.host + "/books");
   }
 
   // contacts

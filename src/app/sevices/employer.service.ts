@@ -8,6 +8,8 @@ import {Office} from "../model/Office";
 import {Vacancy} from "../model/Vacancy";
 import {SpecializationVacancy} from "../model/SpecializationVacancy";
 import {Notification} from "../model/Notification";
+import {StatisticVacancy} from "../model/StatisticVacancy";
+import {Event} from "../model/Event";
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -85,6 +87,10 @@ export class EmployerService {
     return this.http.put(this.host + "/vacancy/status", id, httpOptions);
   }
 
+  getStatisticToVacancy(id: number): Observable<StatisticVacancy> {
+    return this.http.get<StatisticVacancy>(this.host + "/vacancy/statistic/" + id);
+  }
+
   // Notifications
 
   getNotificationsForAccount(): Observable<Notification[]> {
@@ -98,4 +104,25 @@ export class EmployerService {
   updateStatusForNewNotifications() {
     return this.http.put(this.host + "/notifications/see", null, {responseType: 'text'});
   }
+
+  // Events
+
+  getEventsForAccount(): Observable<Event[]> {
+    return this.http.get<Event[]>(this.host + "/events", httpOptions);
+  }
+
+  saveEventForAccount(event: Event): Observable<Event> {
+    return this.http.post<Event>(this.host + "/event", event, httpOptions);
+  }
+
+  deleteEventFromAccount(id: number) {
+    return this.http.delete(this.host + "/event/" + id, {responseType: 'text'});
+  }
+
+  // Private Summary
+
+  downloadPrivatePDF(id: number): Observable<Blob> {
+    return this.http.get(this.host + "/private_summary/" + id, {responseType: 'blob'});
+  }
+
 }

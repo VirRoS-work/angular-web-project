@@ -28,6 +28,12 @@
         <mat-icon>arrow_forward_ios</mat-icon>
       </mat-toolbar-row>
       <mat-toolbar-row class="item-box" (click)=click_menu(5) style="cursor: hand;cursor: pointer;">
+        <mat-icon class="icon-prefix">group_work</mat-icon>
+        <span>Мероприятия</span>
+        <span class="space"></span>
+        <mat-icon>arrow_forward_ios</mat-icon>
+      </mat-toolbar-row>
+      <mat-toolbar-row class="item-box" (click)=click_menu(6) style="cursor: hand;cursor: pointer;">
         <mat-icon class="icon-prefix">settings</mat-icon>
         <span>Настройки</span>
         <span class="space"></span>
@@ -177,7 +183,7 @@
                     <mat-cell *matCellDef="let element">
                       <mat-icon style="cursor: hand;cursor: pointer;"
                                 (click)="openDeleteContactDialog(element.id)">
-                      clear
+                        clear
                       </mat-icon>
                     </mat-cell>
                   </ng-container>
@@ -186,8 +192,6 @@
                   <mat-row *matRowDef="let row; columns: displayedColumnsForContact;"></mat-row>
 
                 </table>
-
-
 
 
                 <div class="test1" *ngIf="disableAddContact.value">
@@ -226,7 +230,7 @@
                       <div class="button-editor">
                         <button mat-flat-button color="primary"
                                 (click)="createContact(contact_type.value, contact_value.value, contact_person.id)">
-                        Добавить
+                          Добавить
                         </button>
                         <button mat-stroked-button class="button-cancel" (click)="clearContact()">Отмена</button>
                       </div>
@@ -239,7 +243,7 @@
                 <div class="button-editors">
                   <button mat-stroked-button class="button-editors-item" color="primary"
                           (click)="openEditContactPersonDialog(contact_person)">
-                          Изменить
+                    Изменить
                   </button>
                   <button mat-stroked-button class="button-editors-item" color="warn"
                           (click)="openDeleteContactPersonDialog(contact_person.id)">
@@ -266,7 +270,8 @@
                   <input matInput #fname_contact placeholder="Введите имя" [formControl]="contactPersonFnameControl"
                          [ngModel]="contactPerson.first_name" required>
                   <mat-icon matSuffix>event_note</mat-icon>
-                  <mat-error *ngIf="contactPersonFnameControl.hasError('required')">Поле обязательно для заполнения</mat-error>
+                  <mat-error *ngIf="contactPersonFnameControl.hasError('required')">Поле обязательно для заполнения
+                  </mat-error>
                 </mat-form-field>
               </p>
 
@@ -276,7 +281,8 @@
                   <input matInput #lname_contact placeholder="Введите фамилию" [formControl]="contactPersonLnameControl"
                          [ngModel]="contactPerson.last_name" required>
                   <mat-icon matSuffix>event_note</mat-icon>
-                  <mat-error *ngIf="contactPersonLnameControl.hasError('required')">Поле обязательно для заполнения</mat-error>
+                  <mat-error *ngIf="contactPersonLnameControl.hasError('required')">Поле обязательно для заполнения
+                  </mat-error>
                 </mat-form-field>
               </p>
 
@@ -313,366 +319,502 @@
 
     <div class="offices_page" *ngIf="pageOffices">
 
-          <div class="profile-content">
+      <div class="profile-content">
 
-            <div class="profile-content-header">
-              <h2 class="profile-content-title">Офисы</h2>
-            </div>
-
-            <hr class="hr-90">
-
-            <div class="profile-content-body">
-
-              <table mat-table class="table-offices" [dataSource]="offices">
-
-                <ng-container matColumnDef="city">
-                  <mat-header-cell *matHeaderCellDef><h3>Город</h3></mat-header-cell>
-                  <mat-cell *matCellDef="let element"> {{element.city}}</mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="address">
-                  <mat-header-cell *matHeaderCellDef><h3>Адрес</h3></mat-header-cell>
-                  <mat-cell *matCellDef="let element"> {{element.address}}</mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="description">
-                  <mat-header-cell *matHeaderCellDef><h3>Описание</h3></mat-header-cell>
-                  <mat-cell *matCellDef="let element"> {{element.description}}</mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="icon">
-                  <mat-header-cell *matHeaderCellDef><h3>Опции</h3></mat-header-cell>
-                  <mat-cell *matCellDef="let element">
-                    <mat-icon (click)=editOfficeDialog(element) style="cursor: hand;cursor: pointer;">
-                      create
-                    </mat-icon>
-                    <mat-icon (click)=openDeleteOfficeDialog(element.id) style="cursor: hand;cursor: pointer;">
-                      clear
-                    </mat-icon>
-                  </mat-cell>
-                </ng-container>
-
-                <mat-header-row *matHeaderRowDef="displayedColumnsForOffices"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumnsForOffices;"></mat-row>
-
-              </table>
-
-              <div class="test1">
-                <button mat-flat-button class="button-editor" color="primary" *ngIf="disableAddOffice.value"
-                        (click)="disableAddOffice.setValue(false)">
-                  Добавить офис
-                </button>
-              </div>
-
-              <div class="test1">
-
-                <form class="reg-office-form" *ngIf="!disableAddOffice.value">
-
-                  <p>
-                    <mat-form-field appearance="outline">
-                      <mat-label>Город</mat-label>
-                      <input matInput #city_office placeholder="Введите название города" [formControl]="officeCityControl"
-                             [ngModel]="office.city" required>
-                      <mat-icon matSuffix>event_note</mat-icon>
-                      <mat-error *ngIf="officeCityControl.hasError('required')">
-                        Название города должно быть обязательно заполнено
-                      </mat-error>
-                    </mat-form-field>
-                  </p>
-
-                  <p>
-                    <mat-form-field appearance="outline">
-                      <mat-label>Адрес</mat-label>
-                      <input matInput #address_office placeholder="Введите адрес офиса" [formControl]="officeAddressControl"
-                             [ngModel]="office.address" required>
-                      <mat-icon matSuffix>map</mat-icon>
-                      <mat-error *ngIf="officeAddressControl.hasError('required')">
-                        Адрес офиса должен быть обязательно заполнен
-                      </mat-error>
-                    </mat-form-field>
-                  </p>
-
-                  <p>
-                    <mat-form-field appearance="outline">
-                      <mat-label>Описание</mat-label>
-                      <textarea matInput #description_office placeholder="Введите описание офиса"
-                                [ngModel]="office.description" [ngModelOptions]="{standalone: true}"
-                                maxlength="1000"></textarea>
-                      <mat-hint align="end">{{description_office.value.length}} / 1000</mat-hint>
-                    </mat-form-field>
-                  </p>
-
-                  <div class="test1">
-                    <div class="button-editor">
-                      <button mat-flat-button color="primary"
-                              (click)="saveOffice(city_office.value, address_office.value, description_office.value)">
-                        Сохранить
-                      </button>
-                      <button mat-stroked-button class="button-cancel" (click)="clearOffice()">Отмена
-                      </button>
-                    </div>
-                  </div>
-
-                </form>
-
-              </div>
-
-
-            </div>
-          </div>
+        <div class="profile-content-header">
+          <h2 class="profile-content-title">Офисы</h2>
         </div>
 
+        <hr class="hr-90">
+
+        <div class="profile-content-body">
+
+          <table mat-table class="table-offices" [dataSource]="offices">
+
+            <ng-container matColumnDef="city">
+              <mat-header-cell *matHeaderCellDef><h3>Город</h3></mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.city}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="address">
+              <mat-header-cell *matHeaderCellDef><h3>Адрес</h3></mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.address}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="description">
+              <mat-header-cell *matHeaderCellDef><h3>Описание</h3></mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.description}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="icon">
+              <mat-header-cell *matHeaderCellDef><h3>Опции</h3></mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <mat-icon (click)=editOfficeDialog(element) style="cursor: hand;cursor: pointer;">
+                  create
+                </mat-icon>
+                <mat-icon (click)=openDeleteOfficeDialog(element.id) style="cursor: hand;cursor: pointer;">
+                  clear
+                </mat-icon>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumnsForOffices"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumnsForOffices;"></mat-row>
+
+          </table>
+
+          <div class="test1">
+            <button mat-flat-button class="button-editor" color="primary" *ngIf="disableAddOffice.value"
+                    (click)="disableAddOffice.setValue(false)">
+              Добавить офис
+            </button>
+          </div>
+
+          <div class="test1">
+
+            <form class="reg-office-form" *ngIf="!disableAddOffice.value">
+
+              <p>
+                <mat-form-field appearance="outline">
+                  <mat-label>Город</mat-label>
+                  <input matInput #city_office placeholder="Введите название города" [formControl]="officeCityControl"
+                         [ngModel]="office.city" required>
+                  <mat-icon matSuffix>event_note</mat-icon>
+                  <mat-error *ngIf="officeCityControl.hasError('required')">
+                    Название города должно быть обязательно заполнено
+                  </mat-error>
+                </mat-form-field>
+              </p>
+
+              <p>
+                <mat-form-field appearance="outline">
+                  <mat-label>Адрес</mat-label>
+                  <input matInput #address_office placeholder="Введите адрес офиса" [formControl]="officeAddressControl"
+                         [ngModel]="office.address" required>
+                  <mat-icon matSuffix>map</mat-icon>
+                  <mat-error *ngIf="officeAddressControl.hasError('required')">
+                    Адрес офиса должен быть обязательно заполнен
+                  </mat-error>
+                </mat-form-field>
+              </p>
+
+              <p>
+                <mat-form-field appearance="outline">
+                  <mat-label>Описание</mat-label>
+                  <textarea matInput #description_office placeholder="Введите описание офиса"
+                            [ngModel]="office.description" [ngModelOptions]="{standalone: true}"
+                            maxlength="1000"></textarea>
+                  <mat-hint align="end">{{description_office.value.length}} / 1000</mat-hint>
+                </mat-form-field>
+              </p>
+
+              <div class="test1">
+                <div class="button-editor">
+                  <button mat-flat-button color="primary"
+                          (click)="saveOffice(city_office.value, address_office.value, description_office.value)">
+                    Сохранить
+                  </button>
+                  <button mat-stroked-button class="button-cancel" (click)="clearOffice()">Отмена
+                  </button>
+                </div>
+              </div>
+
+            </form>
+
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
     <div class="vacancies_page" *ngIf="pageVacancies">
-         <div class="profile-content">
+      <div class="profile-content">
 
-           <div class="profile-content-header">
-             <h2 class="profile-content-title">Вакансии</h2>
-           </div>
+        <div class="profile-content-header">
+          <h2 class="profile-content-title">Вакансии</h2>
+        </div>
 
-           <div class="profile-content-body">
+        <div class="profile-content-body">
 
-             <hr class="hr-90">
+          <hr class="hr-90">
 
 
-             <div class="table-vacancies">
-               <mat-accordion>
-                 <mat-expansion-panel *ngFor="let vacancy of vacancies"
-                                      [expanded]="pointVacancy === vacancy.id"
-                                      (opened)="setPointVacancy(vacancy.id)">
-                   <mat-expansion-panel-header>
-                     <mat-panel-title>
-                       <div class="contact-title-name">{{vacancy.title}}</div>
-                     </mat-panel-title>
-                     <mat-panel-description> {{vacancy.status}}</mat-panel-description>
-                   </mat-expansion-panel-header>
+          <div class="table-vacancies">
+            <mat-accordion>
+              <mat-expansion-panel *ngFor="let vacancy of vacancies"
+                                   [expanded]="pointVacancy === vacancy.id"
+                                   (opened)="setPointVacancy(vacancy.id)">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <div class="contact-title-name">{{vacancy.title}}</div>
+                  </mat-panel-title>
+                  <mat-panel-description> {{vacancy.status}}</mat-panel-description>
+                </mat-expansion-panel-header>
 
-                   <div class="vacancy-content">
-                     <span *ngIf="vacancy.salary_min">Минимальная зарплата: от {{vacancy.salary_min}} руб.<br></span>
-                     <span *ngIf="vacancy.salary_max">Максимальная зарплата: до {{vacancy.salary_max}} руб.<br></span>
-                     <span *ngIf="vacancy.experience_min">Опыт работы: от {{vacancy.experience_min}} лет <br></span>
-                     <span
-                       *ngIf="vacancy.type_employment">Тип занятости: {{vacancy.type_employment}} рабочий день<br/></span>
-                     <span *ngIf="vacancy.remove_work == true || vacancy.remove_work == false">
+                <div class="vacancy-content">
+                  <span *ngIf="vacancy.salary_min">Минимальная зарплата: от {{vacancy.salary_min}} руб.<br></span>
+                  <span *ngIf="vacancy.salary_max">Максимальная зарплата: до {{vacancy.salary_max}} руб.<br></span>
+                  <span *ngIf="vacancy.experience_min">Опыт работы: от {{vacancy.experience_min}} лет <br></span>
+                  <span
+                    *ngIf="vacancy.type_employment">Тип занятости: {{vacancy.type_employment}} рабочий день<br/></span>
+                  <span *ngIf="vacancy.remove_work == true || vacancy.remove_work == false">
                      Удаленной работа:
                      <span *ngIf="vacancy.remove_work; else remove_work">Да</span>
                      <ng-template #remove_work><span>Нет</span></ng-template>
                      <br>
                      </span>
-                     <span>
+                  <span>
                        Описание: {{vacancy.description}}
                      </span>
 
-                     <div class="profile-content-header">
-                       <h3 class="profile-content-title">Специализация</h3>
-                     </div>
+                  <div class="profile-content-header">
+                    <h3 class="profile-content-title">Специализация</h3>
+                  </div>
 
-                     <table mat-table class="table-contacts" [dataSource]="vacancy.fields">
+                  <table mat-table class="table-contacts" [dataSource]="vacancy.fields">
 
-                       <ng-container matColumnDef="field_of_activity">
-                         <mat-header-cell *matHeaderCellDef><h3>Сфера деятельности</h3></mat-header-cell>
-                         <mat-cell *matCellDef="let element"> {{element.field_of_activity.name}}</mat-cell>
-                       </ng-container>
+                    <ng-container matColumnDef="field_of_activity">
+                      <mat-header-cell *matHeaderCellDef><h3>Сфера деятельности</h3></mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.field_of_activity.name}}</mat-cell>
+                    </ng-container>
 
-                       <ng-container matColumnDef="specialization">
-                         <mat-header-cell *matHeaderCellDef><h3>Специализация</h3></mat-header-cell>
-                         <mat-cell *matCellDef="let element"> {{element.specialization}}</mat-cell>
-                       </ng-container>
+                    <ng-container matColumnDef="specialization">
+                      <mat-header-cell *matHeaderCellDef><h3>Специализация</h3></mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.specialization}}</mat-cell>
+                    </ng-container>
 
-                       <ng-container matColumnDef="option">
-                         <mat-header-cell *matHeaderCellDef><h3>Опции</h3></mat-header-cell>
-                         <mat-cell *matCellDef="let element">
-                           <mat-icon style="cursor: hand;cursor: pointer;" (click)="openDeleteSpecificationDialog(element.id)">
-                             clear
-                           </mat-icon>
-                         </mat-cell>
-                       </ng-container>
+                    <ng-container matColumnDef="option">
+                      <mat-header-cell *matHeaderCellDef><h3>Опции</h3></mat-header-cell>
+                      <mat-cell *matCellDef="let element">
+                        <mat-icon style="cursor: hand;cursor: pointer;"
+                                  (click)="openDeleteSpecificationDialog(element.id)">
+                          clear
+                        </mat-icon>
+                      </mat-cell>
+                    </ng-container>
 
-                       <mat-header-row *matHeaderRowDef="displayedColumnsForFields"></mat-header-row>
-                       <mat-row *matRowDef="let row; columns: displayedColumnsForFields;"></mat-row>
+                    <mat-header-row *matHeaderRowDef="displayedColumnsForFields"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumnsForFields;"></mat-row>
 
-                     </table>
+                  </table>
 
-                     <div class="test1" *ngIf="disableAddSpecialization.value">
-                       <div class="button-editor">
-                         <button mat-flat-button class="button-editor" color="primary"
-                                 (click)="disableAddSpecialization.setValue(false)">Добавить специализацию
-                         </button>
-                       </div>
-                     </div>
+                  <div class="test1" *ngIf="disableAddSpecialization.value">
+                    <div class="button-editor">
+                      <button mat-flat-button class="button-editor" color="primary"
+                              (click)="disableAddSpecialization.setValue(false)">Добавить специализацию
+                      </button>
+                    </div>
+                  </div>
 
-                     <div class="createContact" *ngIf="!disableAddSpecialization.value">
+                  <div class="createContact" *ngIf="!disableAddSpecialization.value">
 
-                       <form name="create-specialization">
+                    <form name="create-specialization">
 
-                         <mat-form-field>
-                           <mat-select #specialization_type placeholder="Сфера деятельности" [formControl]="specializationTypeControl"
-                                       required>
-                             <mat-option *ngFor="let type of fieldsOfActivities$" [value]=type.id>
-                               {{type.name}}
-                             </mat-option>
-                           </mat-select>
-                           <mat-error *ngIf="specializationTypeControl.hasError('required')">
-                             Поле обязательно для заполнения.
-                           </mat-error>
-                         </mat-form-field>
+                      <mat-form-field>
+                        <mat-select #specialization_type placeholder="Сфера деятельности"
+                                    [formControl]="specializationTypeControl"
+                                    required>
+                          <mat-option *ngFor="let type of fieldsOfActivities$" [value]=type.id>
+                            {{type.name}}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="specializationTypeControl.hasError('required')">
+                          Поле обязательно для заполнения.
+                        </mat-error>
+                      </mat-form-field>
 
-                         <mat-form-field appearance="outline">
-                           <mat-label>Специализация</mat-label>
-                           <input matInput #specialization_value placeholder="Введите значение" [formControl]="specializationValueControl"
-                                  required>
-                           <mat-icon matSuffix>event_note</mat-icon>
-                           <mat-error *ngIf="specializationValueControl.hasError('required')">
-                             Поле обязательно для заполнения
-                           </mat-error>
-                         </mat-form-field>
+                      <mat-form-field appearance="outline">
+                        <mat-label>Специализация</mat-label>
+                        <input matInput #specialization_value placeholder="Введите значение"
+                               [formControl]="specializationValueControl"
+                               required>
+                        <mat-icon matSuffix>event_note</mat-icon>
+                        <mat-error *ngIf="specializationValueControl.hasError('required')">
+                          Поле обязательно для заполнения
+                        </mat-error>
+                      </mat-form-field>
 
-                         <div class="test1">
-                           <div class="button-editor">
-                             <button mat-flat-button color="primary"
-                                     (click)="createSpecialization(specialization_type.value, specialization_value.value, vacancy.id)">
-                               Добавить
-                             </button>
-                             <button mat-stroked-button class="button-cancel" (click)="clearSpecialization()">Отмена</button>
-                           </div>
-                         </div>
+                      <div class="test1">
+                        <div class="button-editor">
+                          <button mat-flat-button color="primary"
+                                  (click)="createSpecialization(specialization_type.value, specialization_value.value, vacancy.id)">
+                            Добавить
+                          </button>
+                          <button mat-stroked-button class="button-cancel" (click)="clearSpecialization()">Отмена
+                          </button>
+                        </div>
+                      </div>
 
-                       </form>
+                    </form>
 
-                     </div>
+                  </div>
 
-                   </div>
+                </div>
 
 
-                   <div class="button-editors">
-                     <button mat-stroked-button class="button-editors-item" color="primary"
-                             (click)=editStatusVacancy(vacancy.id)>Изменить статус
-                     </button>
-                     <button mat-stroked-button class="button-editors-item" color="primary"
-                             (click)="openEditVacancyDialog(vacancy)">Изменить
-                     </button>
-                     <button mat-stroked-button class="button-editors-item" color="warn"
-                             (click)=openDeleteVacancyDialog(vacancy.id)>Удалить
-                     </button>
-                   </div>
-                 </mat-expansion-panel>
-               </mat-accordion>
-             </div>
+                <div class="button-editors">
+                  <button mat-stroked-button class="button-editors-item" color="primary"
+                          (click)=editStatusVacancy(vacancy.id)>Изменить статус
+                  </button>
+                  <button mat-stroked-button class="button-editors-item" color="primary"
+                          (click)=openStatisticDialog(vacancy.id)>Статистика
+                  </button>
+                  <button mat-stroked-button class="button-editors-item" color="primary"
+                          (click)="openEditVacancyDialog(vacancy)">Изменить
+                  </button>
+                  <button mat-stroked-button class="button-editors-item" color="warn"
+                          (click)=openDeleteVacancyDialog(vacancy.id)>Удалить
+                  </button>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
 
-             <div class="test1">
-               <button mat-flat-button class="button-editor" color="primary" *ngIf="disableAddVacancy.value"
-                       (click)="openCreateVacancyDialog()">
-                 Создать вакансию
-               </button>
-             </div>
+          <div class="test1">
+            <button mat-flat-button class="button-editor" color="primary" *ngIf="disableAddVacancy.value"
+                    (click)="openCreateVacancyDialog()">
+              Создать вакансию
+            </button>
+          </div>
 
-             <form class="reg-office-form" *ngIf="!disableAddVacancy.value">
+          <form class="reg-office-form" *ngIf="!disableAddVacancy.value">
 
-               <p>
-                 <mat-form-field appearance="outline">
-                   <mat-label>Название</mat-label>
-                   <input matInput #vacancy_title placeholder="Укажите название вакансии" [ngModel]="vacancy.title"
-                          [formControl]="vacancyTitleControl" min="6" required>
-                   <mat-icon matSuffix>event_note</mat-icon>
-                   <mat-error *ngIf="vacancyTitleControl.hasError('required')">
-                     Поле обязательно для заполнения
-                   </mat-error>
-                   <mat-error *ngIf="vacancyTitleControl.hasError('minlength')">
-                     Количество символо не менее 6
-                   </mat-error>
-                 </mat-form-field>
-               </p>
+            <p>
+              <mat-form-field appearance="outline">
+                <mat-label>Название</mat-label>
+                <input matInput #vacancy_title placeholder="Укажите название вакансии" [ngModel]="vacancy.title"
+                       [formControl]="vacancyTitleControl" min="6" required>
+                <mat-icon matSuffix>event_note</mat-icon>
+                <mat-error *ngIf="vacancyTitleControl.hasError('required')">
+                  Поле обязательно для заполнения
+                </mat-error>
+                <mat-error *ngIf="vacancyTitleControl.hasError('minlength')">
+                  Количество символо не менее 6
+                </mat-error>
+              </mat-form-field>
+            </p>
 
-               <p>
-                 <mat-form-field>
-                   <mat-label>Описание</mat-label>
-                   <textarea mat-autosize matInput #vacancy_description placeholder="Введите описание вакансии"
-                             [ngModel]="vacancy.description" [formControl]="vacancyDescriptionControl" required></textarea>
-                   <mat-error *ngIf="vacancyDescriptionControl.hasError('required')">
-                     Поле обязательно для заполнения
-                   </mat-error>
-                 </mat-form-field>
-               </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Описание</mat-label>
+                <textarea mat-autosize matInput #vacancy_description placeholder="Введите описание вакансии"
+                          [ngModel]="vacancy.description" [formControl]="vacancyDescriptionControl" required></textarea>
+                <mat-error *ngIf="vacancyDescriptionControl.hasError('required')">
+                  Поле обязательно для заполнения
+                </mat-error>
+              </mat-form-field>
+            </p>
 
-               <p>
-                 <mat-form-field appearance="outline">
-                   <mat-label>Минимальная зарплата</mat-label>
-                   <input matInput type="number" #vacancy_min_salary name="vacancy_min_salary" [ngModel]="vacancy.salary_min"
-                          placeholder="Укажите минимальную разплату" min="0">
-                 </mat-form-field>
+            <p>
+              <mat-form-field appearance="outline">
+                <mat-label>Минимальная зарплата</mat-label>
+                <input matInput type="number" #vacancy_min_salary name="vacancy_min_salary"
+                       [ngModel]="vacancy.salary_min"
+                       placeholder="Укажите минимальную разплату" min="0">
+              </mat-form-field>
 
-                 <mat-form-field appearance="outline">
-                   <mat-label>Максимальная зарплата</mat-label>
-                   <input matInput type="number" #vacancy_max_salary name="vacancy_max_salary" [ngModel]="vacancy.salary_max"
-                          placeholder="Укажите максимальную разплату" min="0">
-                 </mat-form-field>
-               </p>
+              <mat-form-field appearance="outline">
+                <mat-label>Максимальная зарплата</mat-label>
+                <input matInput type="number" #vacancy_max_salary name="vacancy_max_salary"
+                       [ngModel]="vacancy.salary_max"
+                       placeholder="Укажите максимальную разплату" min="0">
+              </mat-form-field>
+            </p>
 
-               <p>
-                 <mat-form-field>
-                   <mat-select #vacancy_type_employment placeholder="Тип занятости" value="{{vacancy.type_employment}}"
-                               [ngModel]="vacancy.type_employment" [ngModelOptions]="{standalone: true}">
-                     <mat-option></mat-option>
-                     <mat-option *ngFor="let type of employmentTypes$" [value]=type>
-                       {{type}}
-                     </mat-option>
-                   </mat-select>
-                 </mat-form-field>
-               </p>
+            <p>
+              <mat-form-field>
+                <mat-select #vacancy_type_employment placeholder="Тип занятости" value="{{vacancy.type_employment}}"
+                            [ngModel]="vacancy.type_employment" [ngModelOptions]="{standalone: true}">
+                  <mat-option></mat-option>
+                  <mat-option *ngFor="let type of employmentTypes$" [value]=type>
+                    {{type}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </p>
 
-               <p>
-                 <mat-form-field appearance="outline">
-                   <mat-label>Минимальный опыт</mat-label>
-                   <input matInput type="number" #vacancy_experience_min [ngModel]="vacancy.experience_min"
-                          [ngModelOptions]="{standalone: true}" placeholder="Укажите минимальный опыт работы" min="0">
-                 </mat-form-field>
-               </p>
+            <p>
+              <mat-form-field appearance="outline">
+                <mat-label>Минимальный опыт</mat-label>
+                <input matInput type="number" #vacancy_experience_min [ngModel]="vacancy.experience_min"
+                       [ngModelOptions]="{standalone: true}" placeholder="Укажите минимальный опыт работы" min="0">
+              </mat-form-field>
+            </p>
 
-               <p>
-                 <mat-form-field>
-                   <mat-select #vacancy_remove_work placeholder="Удаленная работа" value="{{vacancy.remove_work}}"
-                               [ngModel]="vacancy.remove_work" [ngModelOptions]="{standalone: true}" >
-                     <mat-option [value]=undefined></mat-option>
-                     <mat-option [value]=true>Да</mat-option>
-                     <mat-option [value]=false>Нет</mat-option>
-                   </mat-select>
-                 </mat-form-field>
-               </p>
+            <p>
+              <mat-form-field>
+                <mat-select #vacancy_remove_work placeholder="Удаленная работа" value="{{vacancy.remove_work}}"
+                            [ngModel]="vacancy.remove_work" [ngModelOptions]="{standalone: true}">
+                  <mat-option [value]=undefined></mat-option>
+                  <mat-option [value]=true>Да</mat-option>
+                  <mat-option [value]=false>Нет</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </p>
 
-               <p>
-                 <mat-form-field>
-                   <mat-select #vacancy_office placeholder="Рабочий офис" [ngModel]="vacancy.office != undefined ? vacancy.office.id : null"
-                               value="{{vacancy.office != undefined ? vacancy.office.id : null}}" [ngModelOptions]="{standalone: true}">
-                     <mat-option [value]=null></mat-option>
-                     <mat-option *ngFor="let office of offices" [value]=office.id>
-                       {{office.city}} - {{office.address}}
-                     </mat-option>
-                   </mat-select>
-                 </mat-form-field>
-               </p>
+            <p>
+              <mat-form-field>
+                <mat-select #vacancy_office placeholder="Рабочий офис"
+                            [ngModel]="vacancy.office != undefined ? vacancy.office.id : null"
+                            value="{{vacancy.office != undefined ? vacancy.office.id : null}}"
+                            [ngModelOptions]="{standalone: true}">
+                  <mat-option [value]=null></mat-option>
+                  <mat-option *ngFor="let office of offices" [value]=office.id>
+                    {{office.city}} - {{office.address}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </p>
 
-               <div class="test1">
-                 <div class="button-editor">
-                   <button mat-flat-button color="primary" (click)="saveVacancy(vacancy_title.value, vacancy_description.value,
+            <div class="test1">
+              <div class="button-editor">
+                <button mat-flat-button color="primary" (click)="saveVacancy(vacancy_title.value, vacancy_description.value,
                    vacancy_min_salary.value, vacancy_max_salary.value, vacancy_type_employment.value, vacancy_remove_work.value,
                    vacancy_experience_min.value, vacancy_office.value);">
-                     Сохранить
-                   </button>
-                   <button mat-stroked-button class="button-cancel" (click)="clearVacancy()">
-                     Отмена
-                   </button>
-                 </div>
-               </div>
+                  Сохранить
+                </button>
+                <button mat-stroked-button class="button-cancel" (click)="clearVacancy()">
+                  Отмена
+                </button>
+              </div>
+            </div>
 
 
-             </form>
+          </form>
 
-           </div>
+        </div>
 
-         </div>
-       </div>
+      </div>
+    </div>
+
+    <div class="events_page" *ngIf="pageEvents">
+      <div class="profile-content">
+
+        <div class="profile-content-header">
+          <h2 class="profile-content-title">Мероприятия</h2>
+        </div>
+
+        <div class="profile-content-body">
+
+          <hr class="hr-90">
+
+          <div class="table-events">
+
+            <mat-accordion>
+              <mat-expansion-panel *ngFor="let event of events"
+                                   [expanded]="pointEvent === event.id"
+                                   (opened)="setPointEvent(event.id)">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <div class="contact-title-name">{{event.title}}</div>
+                </mat-panel-title>
+                <mat-panel-description> {{event.time}}</mat-panel-description>
+              </mat-expansion-panel-header>
+
+                <div class="event-content">
+
+                  <span> Время: {{event.time}} <br/></span>
+                  <span> Тип: {{event.type}} <br/></span>
+                  <span> Описание: {{event.description}} </span>
+
+                </div>
+
+                <div class="button-editors">
+                  <button mat-stroked-button class="button-editors-item" color="primary"
+                          (click)="openEditEventDialog(event)">Изменить</button>
+                  <button mat-stroked-button class="button-editors-item" color="warn"
+                          (click)=openDeleteEventDialog(event.id)>Удалить</button>
+                </div>
+
+
+              </mat-expansion-panel>
+            </mat-accordion>
+
+          </div>
+
+          <div class="test1">
+            <button mat-flat-button class="button-editor" color="primary" *ngIf="disableAddEvent.value"
+                    (click)="openCreateEventDialog()">
+              Создать мероприятие
+            </button>
+          </div>
+
+          <form class="reg-event-form" *ngIf="!disableAddEvent.value">
+
+            <mat-form-field appearance="outline">
+              <mat-label>Название</mat-label>
+              <input matInput #event_title placeholder="Укажите название мероприятия" [(ngModel)]="event.title"
+                     [formControl]="eventTitleControl" min="6" required>
+              <mat-icon matSuffix>event_note</mat-icon>
+              <mat-error *ngIf="eventTitleControl.hasError('required')">
+                Поле обязательно для заполнения
+              </mat-error>
+              <mat-error *ngIf="eventTitleControl.hasError('minlength')">
+                Количество символо не менее 6
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Тип</mat-label>
+              <input matInput #event_type placeholder="Укажите тип мероприятия" [(ngModel)]="event.type"
+                     [formControl]="eventTypeControl" required>
+              <mat-icon matSuffix>event_note</mat-icon>
+              <mat-error *ngIf="eventTypeControl.hasError('required')">
+                Поле обязательно для заполнения
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Время</mat-label>
+              <input matInput #event_time placeholder="Укажите время мероприятия" [(ngModel)]="event.time"
+                     [formControl]="eventTimeControl" required>
+              <mat-icon matSuffix>event_note</mat-icon>
+              <mat-error *ngIf="eventTimeControl.hasError('required')">
+                Поле обязательно для заполнения
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Место</mat-label>
+              <input matInput #event_address placeholder="Укажите место мероприятия" [(ngModel)]="event.address"
+                     [formControl]="eventAddressControl" required>
+              <mat-icon matSuffix>event_note</mat-icon>
+              <mat-error *ngIf="eventAddressControl.hasError('required')">
+                Поле обязательно для заполнения
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Описание</mat-label>
+              <textarea matInput #event_description placeholder="Введите описание события"
+                        [(ngModel)]="event.description" [ngModelOptions]="{standalone: true}"
+                        maxlength="1000"></textarea>
+              <mat-hint align="end">{{event_description.value.length}} / 1000</mat-hint>
+            </mat-form-field>
+
+
+
+            <div class="test1">
+              <div class="button-editor">
+                <button mat-flat-button color="primary" (click)="saveEvent();">
+                  Сохранить
+                </button>
+                <button mat-stroked-button class="button-cancel" (click)="clearEvent()">
+                  Отмена
+                </button>
+              </div>
+            </div>
+
+          </form>
+
+        </div>
+
+      </div>
+    </div>
 
     <div class="settings_page" *ngIf="pageSettings">
-        Настройки
+      Настройки
     </div>
   </div>
 </div>

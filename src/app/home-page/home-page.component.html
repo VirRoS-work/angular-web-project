@@ -20,6 +20,15 @@
 
     </mat-list>
 
+    <br/>
+
+    <div class="vacancies-header">
+      <h2 class="vacancies-title">Ближайшие мероприятия</h2>
+    </div>
+    <hr class="hr-90">
+
+    <app-event-card *ngFor="let event of events$" [event]="event"></app-event-card>
+
   </div> <!-- list companies -->
 
   <div class="right-content">
@@ -29,8 +38,7 @@
     </div>
     <hr class="hr-90">
 
-    <app-vacancy-card *ngFor="let vacancy of vacancies$" title="{{vacancy.title}}" description="{{vacancy.description}}"
-                      salary_max="{{vacancy.salary_max}}" salary_min="{{vacancy.salary_min}}" id="{{vacancy.id}}"></app-vacancy-card>
+    <app-vacancy-card *ngFor="let vacancy of vacancies$" [vacancy]="vacancy"></app-vacancy-card>
 
     <div class="test1">
       <button mat-flat-button class="button-editor" color="primary" routerLink="/vacancies">Перейти на страницу вакансий</button>

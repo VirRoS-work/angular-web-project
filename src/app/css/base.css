@@ -35,11 +35,20 @@
   width: 70%;
 }
 
+.right-menu {
+  display: table-cell;
+  width: 30%;
+}
+
 .right-content {
   display: table-cell;
   width: 70%;
 }
 
+.description {
+  white-space: pre-wrap;
+  text-align: justify;
+}
 
 /* Header */
 .content-header {
@@ -109,4 +118,20 @@ mat-form-field {
 
 .element-title {
   margin: auto;
+}
+
+
+.filter {
+  width: 90%;
+  margin-left: 5%;
+}
+
+.filter-text {
+  vertical-align: center;
+  margin-bottom: 15px;
+  display: flex;
+}
+
+.space {
+  flex: 1 1 auto;
 }

@@ -14,6 +14,8 @@ import {Office} from "../model/Office";
 import {FieldOfActivity} from "../model/FieldOfActivity";
 import {Vacancy} from "../model/Vacancy";
 import {SpecializationVacancy} from "../model/SpecializationVacancy";
+import {StatisticVacancy} from "../model/StatisticVacancy";
+import {Event} from "../model/Event";
 
 export interface DialogData {
   id: number;
@@ -38,6 +40,7 @@ export class ProfileComponent implements OnInit {
   pageContact = false;
   pageOffices = false;
   pageVacancies = false;
+  pageEvents = false;
   pageSettings = false;
 
   //disabled page content
@@ -47,6 +50,7 @@ export class ProfileComponent implements OnInit {
   disableAddContactPerson = new FormControl(true);
   disableAddContact = new FormControl(true);
   disableAddSpecialization = new FormControl(true);
+  disableAddEvent = new FormControl(true);
 
   //const
   employer$: Employer;
@@ -65,6 +69,9 @@ export class ProfileComponent implements OnInit {
   vacancies: Vacancy[];
   vacancy: Vacancy = new Vacancy(null, null, null, null, null,
     null, null, null, null, null,null);
+  statistic: StatisticVacancy;
+  events: Event[];
+  event: Event = new Event(null, null, null, null, null, null);
 
   //Controls for Contact Persons
   contactPersonFnameControl = new FormControl('', [Validators.required]);
@@ -81,10 +88,16 @@ export class ProfileComponent implements OnInit {
   //Controls for Vacancy Page
   vacancyTitleControl = new FormControl('', [Validators.required, Validators.minLength(6)]);
   vacancyDescriptionControl = new FormControl('', [Validators.required]);
+  //Controls for Event Page
+  eventTitleControl = new FormControl('', [Validators.required, Validators.minLength(6)]);
+  eventTypeControl = new FormControl('', [Validators.required]);
+  eventTimeControl = new FormControl('', [Validators.required]);
+  eventAddressControl = new FormControl('', [Validators.required]);
 
   // Points
   pointContactPerson = 0;
   pointVacancy = 0;
+  pointEvent = 0;
 
   // Display Columns
   displayedColumnsForOffices: string[] = ['city', 'address', 'description', 'icon'];
@@ -126,6 +139,7 @@ export class ProfileComponent implements OnInit {
           this.contactPersons = this.employer.contacts;
           this.offices = this.employer.offices;
           this.vacancies = this.employer.vacancies;
+          this.events = this.employer.events;
         }
       );
 
@@ -179,6 +193,10 @@ export class ProfileComponent implements OnInit {
         break;
       case 5:
         this.clearPageContent();
+        this.pageEvents = true;
+        break;
+      case 6:
+        this.clearPageContent();
         this.pageSettings = true;
         break;
     }
@@ -194,6 +212,7 @@ export class ProfileComponent implements OnInit {
     this.pageOffices = false;
     this.pageVacancies = false;
     this.pageSettings = false;
+    this.pageEvents = false;
   }
 
   // Contact methods
@@ -569,12 +588,100 @@ export class ProfileComponent implements OnInit {
     );
   }
 
+  openStatisticDialog(id: number): void {
+
+    this.empl.getStatisticToVacancy(id).subscribe(
+      data => {
+        this.statistic = data;
+
+        const dialogRef = this.dialog.open(StatisticVacancyDialog,
+          {
+            width: '450px',
+            data: {statistic: this.statistic}
+          });
+      }
+    );
+  }
+
   clearVacancyPage(){
     this.clearVacancy();
     this.clearSpecialization();
   }
-}
 
+  //Events methods
+
+  setPointEvent(index: number){
+    this.pointEvent = index;
+
+  }
+
+  openCreateEventDialog(): void {
+
+    this.disableAddEvent.setValue(false);
+    this.setPointEvent(0);
+
+    if(this.event.time == null) this.event.time = new Date();
+
+  }
+
+  saveEvent(): void {
+
+    if (this.eventTitleControl.valid) {
+
+      this.empl.saveEventForAccount(this.event).subscribe(
+        data => this.empl.getEventsForAccount().subscribe(data => this.events = data)
+      );
+
+      this.clearEvent();
+    }
+  }
+
+  clearEvent(): void {
+
+    this.event = new Event(null, null, null, null, null, null);
+
+    this.eventTitleControl.reset();
+    this.eventTypeControl.reset();
+    this.eventAddressControl.reset();
+    this.eventTimeControl.reset();
+
+    this.disableAddEvent.setValue(true);
+  }
+
+  openEditEventDialog(event: Event): void {
+
+    this.event = event;
+
+    this.setPointEvent(0);
+    this.disableAddEvent.setValue(false);
+  }
+
+  openDeleteEventDialog(id: number): void {
+
+    const dialogRef = this.dialog.open(DeleteEventDialog,
+      {
+        width: '250px',
+        data: {id: id}
+      });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != undefined) this.deleteEvent(result);
+    });
+
+  }
+
+  deleteEvent(id: number): void {
+
+    this.empl.deleteEventFromAccount(id).subscribe(
+      data => {
+        this.empl.getEventsForAccount().subscribe(
+          data => this.events = data
+        );
+      }
+    );
+  }
+
+}
 
 @Component({
   selector: 'delete-office-dialog',
@@ -599,6 +706,23 @@ export class DeleteOfficeDialog {
   styleUrls: ['./profile.component.css']
 })
 export class DeleteVacancyDialog {
+
+  constructor(
+    public dialogRef: MatDialogRef<DeleteVacancyDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+}
+
+@Component({
+  selector: 'statistic-vacancy-dialog',
+  templateUrl: 'statistic-vacancy-dialog.html',
+  styleUrls: ['./profile.component.css']
+})
+export class StatisticVacancyDialog {
 
   constructor(
     public dialogRef: MatDialogRef<DeleteVacancyDialog>,
@@ -653,7 +777,24 @@ export class DeleteContactDialog {
 export class DeleteSpecificationDialog {
 
   constructor(
-    public dialogRef: MatDialogRef<DeleteContactDialog>,
+    public dialogRef: MatDialogRef<DeleteSpecificationDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+}
+
+@Component({
+  selector: 'delete-event-dialog',
+  templateUrl: 'delete-event-dialog.html',
+  styleUrls: ['./profile.component.css']
+})
+export class DeleteEventDialog {
+
+  constructor(
+    public dialogRef: MatDialogRef<DeleteEventDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {
   }
 
