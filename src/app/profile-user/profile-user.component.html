@@ -531,7 +531,7 @@
         <mat-form-field appearance="outline">
           <mat-label>Название компании</mat-label>
           <input matInput name="exp_company_name" #exp_company_name placeholder="Введите название компании"
-                 [ngModel]="experience.company_name" [formControl]="experienceCompanyNameControl" required>
+                 [(ngModel)]="experience.company_name" [formControl]="experienceCompanyNameControl" required>
           <mat-icon matSuffix>event_note</mat-icon>
           <mat-error *ngIf="experienceCompanyNameControl.hasError('required')">
             Название компании должно быть обязательно заполнено
@@ -540,7 +540,7 @@
         <mat-form-field appearance="outline">
           <mat-label>Позиция</mat-label>
           <input matInput name="exp_position" #exp_position placeholder="Введите позицию"
-                 [ngModel]="experience.position" [formControl]="experiencePositionControl" required>
+                 [(ngModel)]="experience.position" [formControl]="experiencePositionControl" required>
           <mat-icon matSuffix>event_note</mat-icon>
           <mat-error *ngIf="experiencePositionControl.hasError('required')">
             Позиция должна быть обязательно заполнена
@@ -549,7 +549,7 @@
         <mat-form-field>
           <mat-label>Дата начала работы</mat-label>
           <input matInput #exp_date_start [matDatepicker]="picker" placeholder="Выберите дату"
-                 [formControl]="experienceDateStartControl" required>
+                 [(ngModel)]="experience.date_start" [formControl]="experienceDateStartControl" required>
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
           <mat-error *ngIf="experienceDateStartControl.hasError('required')">
@@ -558,18 +558,21 @@
         </mat-form-field> <!-- input date start -->
         <mat-form-field>
           <mat-label>Дата окончания работы</mat-label>
-          <input matInput #exp_date_end [matDatepicker]="picker2" placeholder="Выберите дату">
+          <input matInput #exp_date_end [matDatepicker]="picker2" placeholder="Выберите дату" name="exp_date_end"
+            [(ngModel)]="experience.date_end">
           <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
           <mat-datepicker #picker2></mat-datepicker>
         </mat-form-field> <!-- input date end -->
         <mat-form-field appearance="outline">
           <mat-label>Обязанности</mat-label>
-          <textarea matInput #exp_duties placeholder="Опишите ваши обязанности" maxlength="1000"></textarea>
+          <textarea matInput #exp_duties placeholder="Опишите ваши обязанности" maxlength="1000"
+          [(ngModel)]="experience.duties" name="exp_duties"></textarea>
           <mat-hint align="end">{{exp_duties.value.length}} / 1000</mat-hint>
         </mat-form-field> <!-- input duties -->
         <mat-form-field appearance="outline">
           <mat-label>Достижения</mat-label>
-          <textarea matInput #exp_achievements placeholder="Напишите о ваших достижениях" maxlength="1000"></textarea>
+          <textarea matInput #exp_achievements placeholder="Напишите о ваших достижениях" maxlength="1000"
+          name="exp_achievements" [(ngModel)]="experience.achievements"></textarea>
           <mat-hint align="end">{{exp_achievements.value.length}} / 1000</mat-hint>
         </mat-form-field> <!-- input achievements -->
 

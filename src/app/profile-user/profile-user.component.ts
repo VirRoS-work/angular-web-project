@@ -539,6 +539,10 @@ export class ProfileUserComponent implements OnInit {
   }
 
   clearExperience(): void {
+
+    this.experience = new Experience(null, null, null,
+      null, null, null, null);
+
     this.experienceCompanyNameControl.reset();
     this.experiencePositionControl.reset();
     this.experienceDateStartControl.reset();
