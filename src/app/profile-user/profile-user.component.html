@@ -394,7 +394,7 @@
         <mat-form-field appearance="outline">
           <mat-label>Название учебного заведения</mat-label>
           <input matInput name="educ_institution" #educ_institution placeholder="Введите название учебного заведения"
-                 [ngModel]="education.educational_institution" [formControl]="educationInstitutionControl" required>
+                 [(ngModel)]="education.educational_institution" [formControl]="educationInstitutionControl" required>
           <mat-icon matSuffix>event_note</mat-icon>
           <mat-error *ngIf="educationInstitutionControl.hasError('required')">
             Название учебного заведения должно быть обязательно заполнено
@@ -403,7 +403,7 @@
         <mat-form-field appearance="outline">
           <mat-label>Факультет</mat-label>
           <input matInput name="educ_faculty" #educ_faculty placeholder="Введите названия факультета"
-                 [ngModel]="education.faculty" [formControl]="educationFacultyControl" required>
+                 [(ngModel)]="education.faculty" [formControl]="educationFacultyControl" required>
           <mat-icon matSuffix>event_note</mat-icon>
           <mat-error *ngIf="educationFacultyControl.hasError('required')">
             Поле должно быть обязательно заполнена
@@ -412,7 +412,7 @@
         <mat-form-field appearance="outline">
           <mat-label>Специализация</mat-label>
           <input matInput name="educ_specialization" #educ_specialization placeholder="Введите названия специализации"
-                 [ngModel]="education.faculty" [formControl]="educationSpecializationControl" required>
+                 [(ngModel)]="education.specialization" [formControl]="educationSpecializationControl" required>
           <mat-icon matSuffix>event_note</mat-icon>
           <mat-error *ngIf="educationSpecializationControl.hasError('required')">
             Поле должно быть обязательно заполнено
@@ -421,7 +421,7 @@
         <mat-form-field>
           <mat-label>Дата начала обучения</mat-label>
           <input matInput #educ_date_start [matDatepicker]="picker" placeholder="Выберите дату"
-                 [formControl]="educationDateStartControl" required>
+                 [(ngModel)]="education.date_start" [formControl]="educationDateStartControl" required>
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
           <mat-error *ngIf="educationDateStartControl.hasError('required')">
@@ -430,18 +430,21 @@
         </mat-form-field> <!-- input date start -->
         <mat-form-field>
           <mat-label>Дата окончания обучения</mat-label>
-          <input matInput #educ_date_end [matDatepicker]="picker2" placeholder="Выберите дату">
+          <input matInput #educ_date_end name="educ_date_end" [matDatepicker]="picker2"
+                 [(ngModel)]="education.date_end" placeholder="Выберите дату">
           <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
           <mat-datepicker #picker2></mat-datepicker>
         </mat-form-field> <!-- input date end -->
-        <mat-form-field appearance="outline">
-          <mat-label>Уровень образования</mat-label>
-          <input matInput name="educ_level" #educ_level placeholder="Опишите уровень образования"
-                 [ngModel]="education.level_education">
-          <mat-icon matSuffix>event_note</mat-icon>
-        </mat-form-field><!-- input -->
         <mat-form-field>
-          <mat-select #educ_form name="educ_form" placeholder="Форма обучения"
+          <mat-select #educ_level placeholder="Уровень образования" [(ngModel)]="education.level_education"
+                      [(formControl)]="educationLevelControl" required>
+            <mat-option *ngFor="let educ of educations$" [value]="educ">
+              {{educ}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field> <!-- select education level -->
+        <mat-form-field>
+          <mat-select #educ_form name="educ_form" placeholder="Форма обучения" [(ngModel)]="education.form_training"
                       [formControl]="educationFormTrainingControl" required>
             <mat-option *ngFor="let form of formstraining$" [value]=form>
               {{form}}

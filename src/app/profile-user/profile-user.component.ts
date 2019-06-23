@@ -40,6 +40,7 @@ export class ProfileUserComponent implements OnInit {
   familyStatus$: string[];
   contacttypes$: ContactType[];
   fieldsOfActivities$: FieldOfActivity[];
+  educations$: string[] = ["Высшее", "Неоконченное высшее", "Среднее специальное", "Среднее"];
 
   //disable
   disableAddLanguageSkill = new FormControl(true);
@@ -70,6 +71,7 @@ export class ProfileUserComponent implements OnInit {
   educationFacultyControl = new FormControl('', [Validators.required]);
   educationSpecializationControl = new FormControl('', [Validators.required]);
   educationDateStartControl = new FormControl('', [Validators.required]);
+  educationLevelControl = new FormControl('', [Validators.required]);
   educationFormTrainingControl = new FormControl('', [Validators.required]);
   //languages controls
   languageNameControl = new FormControl('', [Validators.required]);
@@ -563,7 +565,7 @@ export class ProfileUserComponent implements OnInit {
       this.educationFormTrainingControl.valid) {
 
       this.us.saveEducationForAccount(new Education(institution, faculty, specialization, new Date(date_start),
-        new Date(date_end), level, form, this.education.id)).subscribe(
+        new Date(date_end), this.education.level_education, this.education.form_training, this.education.id)).subscribe(
         data => {
 
           this.us.getEducationsForAccount().subscribe(
@@ -622,6 +624,10 @@ export class ProfileUserComponent implements OnInit {
     this.educationSpecializationControl.reset();
     this.educationDateStartControl.reset();
     this.educationFormTrainingControl.reset();
+    this.educationLevelControl.reset();
+
+    this.education = new Education(null, null, null, null,
+      null, null, null);
 
     this.disableAddEducation.setValue(true);
   }
