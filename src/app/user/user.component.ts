@@ -59,4 +59,13 @@ export class UserComponent implements OnInit {
     );
   }
 
+  getNormalDate(date: Date): string {
+
+    if(date == null) return null;
+
+    date = new Date(date);
+
+    return date.getDate() + "-" + (date.getMonth()+1) + "-" + date.getFullYear();
+  }
+
 }

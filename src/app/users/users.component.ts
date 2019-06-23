@@ -19,7 +19,11 @@ export class UsersComponent implements OnInit {
     if (this.tokenStorage.getToken() && ("COMPANY" === this.tokenStorage.getAuthority() || "ADMIN" === this.tokenStorage.getAuthority())) {
 
       this.content.getUsers().subscribe(
-        data => this.users$ = data
+        data => {
+          this.users$ = data;
+
+          console.log(this.users$);
+        }
       );
     } else {
       window.location.replace("");

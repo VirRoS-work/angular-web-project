@@ -13,7 +13,7 @@
         Пол: <span *ngIf="user$.sex === true; else sex">Мужской</span>
         <ng-template #sex>Женский</ng-template>
         <br/>
-        Дата рождения: {{user$.date_of_birth}}
+        Дата рождения: {{getNormalDate(user$.date_of_birth)}}
       </p>
       <p *ngIf="user$.info">
         <span *ngIf="user$.info.ready_for_remove_work">Удаленной работа:
@@ -75,8 +75,8 @@
 
         Компания: {{experience.company_name}}<br/>
         Должность: {{experience.position}}<br/>
-        <span *ngIf="experience.date_start">Начало работы: {{experience.date_start}}<br/></span> <!-- date_start -->
-        <span *ngIf="experience.date_end">Окончание работы: {{experience.date_end}}<br/></span> <!-- date_end -->
+        <span *ngIf="experience.date_start">Начало работы: {{getNormalDate(experience.date_start)}}<br/></span> <!-- date_start -->
+        <span *ngIf="experience.date_end">Окончание работы: {{getNormalDate(experience.date_end)}}<br/></span> <!-- date_end -->
         <span *ngIf="experience.duties">Обязанности: {{experience.duties}}<br/></span> <!-- duties -->
         <span *ngIf="experience.achievements">Достижения: {{experience.achievements}}<br/></span> <!-- achievements -->
 
@@ -95,8 +95,8 @@
         Образовательное учреждение: {{educ.educational_institution}}<br/>
         Факультет: {{educ.faculty}}<br/>
         Специализация: {{educ.specialization}}<br/>
-        <span *ngIf="educ.date_start">Начало учебы: {{educ.date_start}}<br/></span> <!-- date_start -->
-        <span *ngIf="educ.date_end">Окончание учебы: {{educ.date_end}}<br/></span> <!-- date_end -->
+        <span *ngIf="educ.date_start">Начало учебы: {{getNormalDate(educ.date_start)}}<br/></span> <!-- date_start -->
+        <span *ngIf="educ.date_end">Окончание учебы: {{getNormalDate(educ.date_end)}}<br/></span> <!-- date_end -->
         <span *ngIf="educ.level_education">Уровень образования: {{educ.level_education}}<br/></span> <!-- level_education -->
         <span *ngIf="educ.form_training">Форма обучения: {{educ.form_training}}<br/></span> <!-- form_training -->
       </p>
