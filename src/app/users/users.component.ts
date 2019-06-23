@@ -6,7 +6,7 @@ import {ContentService} from "../sevices/content.service";
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.css']
+  styleUrls: ['../css/base.css', './users.component.css']
 })
 export class UsersComponent implements OnInit {
 

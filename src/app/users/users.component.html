@@ -6,7 +6,30 @@
       <h2 class="element-title">Фильтры</h2>
     </div>
     <hr class="hr-90">
+
+    <mat-form-field appearance="outline" class="filter">
+      <mat-label>Ключевое слово</mat-label>
+      <input matInput #vacancy_name placeholder="Ключевое слово">
+    </mat-form-field> <!-- book author -->
+
+    <div class="filter filter-text">
+      <span>Имеется опыт</span>
+      <span class="space"></span>
+      <mat-slide-toggle color='primary'></mat-slide-toggle>
+    </div>
+
+    <div class="flex-div">
+      <button mat-flat-button class="button-editor" color="primary">
+        Поиск
+      </button>
+    </div> <!-- sport add button -->
+
+    <hr class="hr-90">
+
+
   </div> <!-- filters -->
+
+
 
   <div class="users-content">
 

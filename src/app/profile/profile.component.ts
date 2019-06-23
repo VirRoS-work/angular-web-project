@@ -594,6 +594,8 @@ export class ProfileComponent implements OnInit {
       data => {
         this.statistic = data;
 
+        console.log(this.statistic);
+
         const dialogRef = this.dialog.open(StatisticVacancyDialog,
           {
             width: '450px',
@@ -725,7 +727,7 @@ export class DeleteVacancyDialog {
 export class StatisticVacancyDialog {
 
   constructor(
-    public dialogRef: MatDialogRef<DeleteVacancyDialog>,
+    public dialogRef: MatDialogRef<StatisticVacancyDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {
   }
 
