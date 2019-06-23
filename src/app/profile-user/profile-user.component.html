@@ -360,8 +360,8 @@
               <br/>Образовательное учреждение: {{educ.educational_institution}}
               <br/>Факультет: {{educ.faculty}}
               <br/>Специализация: {{educ.specialization}}
-              <br/>Начало учебы: {{educ.date_start}}
-              <br/>Окончание учебы: {{educ.date_end}}
+              <br/>Начало учебы: {{getNormalDate(educ.date_start)}}
+              <br/>Окончание учебы: {{getNormalDate(educ.date_end)}}
               <br/>Уровень образования: {{educ.level_education}}
               <br/>Форма обучения: {{educ.form_training}}
 
@@ -496,8 +496,8 @@
 
               <br/>Компания: {{exp.company_name}}
               <br/>Должность: {{exp.position}}
-              <br/>Начало работы: {{exp.date_start}}
-              <br/>Окончание работы: {{exp.date_end}}
+              <br/>Начало работы: {{getNormalDate(exp.date_start)}}
+              <br/>Окончание работы: {{getNormalDate(exp.date_end)}}
               <br/>Обязанности: {{exp.duties}}
               <br/>Достижения: {{exp.achievements}}
 

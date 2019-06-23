@@ -761,6 +761,21 @@ export class ProfileUserComponent implements OnInit {
       }, 100);
     });
   }
+
+  getNormalDateTime(date: Date): string {
+
+    date = new Date(date);
+
+    return date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear() + " в " + date.getHours() + ":"
+      + ((date.getMinutes() == 0) ? "00" : date.getMinutes());
+  }
+
+  getNormalDate(date: Date): string {
+
+    date = new Date(date);
+
+    return date.getDate() + "-" + (date.getMonth()+1) + "-" + date.getFullYear();
+  }
 }
 
 
