@@ -118,7 +118,7 @@
                  [ngModel]="applicant.father_name" [disabled]="disableInfo.value" required>
         </mat-form-field>
         <mat-form-field>
-          <mat-select #info_sex placeholder="Пол" [ngModel]="applicant.sex" [disabled]="disableInfo.value" required>
+          <mat-select #info_sex placeholder="Пол" [(ngModel)]="applicant.sex" [disabled]="disableInfo.value" required>
             <mat-option [value]=true> Мужской</mat-option>
             <mat-option [value]=false> Женский</mat-option>
           </mat-select>

@@ -257,7 +257,8 @@ export class ProfileUserComponent implements OnInit {
 
   saveInfo(first_name: string, last_name: string, father_name: string, sex: boolean, birthday: string): void {
 
-    this.us.saveApplicantForAccount(new Applicant(first_name, last_name, father_name, sex, new Date(birthday))).subscribe(
+    this.us.saveApplicantForAccount(new Applicant(first_name, last_name, father_name,
+      this.applicant.sex, new Date(birthday))).subscribe(
       data => {
         this.applicant$ = data;
         this.applicant = data;
