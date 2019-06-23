@@ -619,15 +619,15 @@ export class ProfileUserComponent implements OnInit {
   }
 
   clearEducation(): void {
+    this.education = new Education(null, null, null, null,
+      null, null, null, null);
+
     this.educationInstitutionControl.reset();
     this.educationFacultyControl.reset();
     this.educationSpecializationControl.reset();
     this.educationDateStartControl.reset();
     this.educationFormTrainingControl.reset();
     this.educationLevelControl.reset();
-
-    this.education = new Education(null, null, null, null,
-      null, null, null);
 
     this.disableAddEducation.setValue(true);
   }
